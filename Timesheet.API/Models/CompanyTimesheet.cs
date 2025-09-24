@@ -1,6 +1,4 @@
-﻿using static Timesheet.API.Constants.Enums;
-
-namespace Timesheet.API.Models
+﻿namespace Timesheet.API.Models
 {
     public class CompanyTimesheet
     {

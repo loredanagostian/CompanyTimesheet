@@ -1,11 +1,10 @@
-﻿using Timesheet.API.Constants;
-using Timesheet.API.Models;
+﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
-using static Timesheet.API.Constants.Enums;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
-    public class EmployeeService
+    public class EmployeeService : IEmployeeService
     {
         private static List<Employee> _employees = new List<Employee>();
         private static int _employeeCounter = 1;

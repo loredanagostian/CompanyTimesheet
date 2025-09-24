@@ -1,13 +1,14 @@
 using System.Text.Json.Serialization;
 using Timesheet.API.Services;
+using Timesheet.API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<EmployeeService>();
-builder.Services.AddSingleton<UserAccountService>();
-builder.Services.AddSingleton<TimeEntryService>();
-builder.Services.AddSingleton<CompanyTimesheetService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
+builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
+builder.Services.AddScoped<ICompanyTimesheetService, CompanyTimesheetService>();
 
 builder.Services
     .AddControllers()

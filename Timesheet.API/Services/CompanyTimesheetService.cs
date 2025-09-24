@@ -1,14 +1,15 @@
 ﻿using Timesheet.API.Models;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
-    public class CompanyTimesheetService
+    public class CompanyTimesheetService : ICompanyTimesheetService
     {
-        private readonly EmployeeService _employeeService;
-        private readonly UserAccountService _userAccountService;
-        private readonly TimeEntryService _timeEntryService;
+        private readonly IEmployeeService _employeeService;
+        private readonly IUserAccountService _userAccountService;
+        private readonly ITimeEntryService _timeEntryService;
 
-        public CompanyTimesheetService(EmployeeService employeeService, UserAccountService userAccountService, TimeEntryService timeEntryService)
+        public CompanyTimesheetService(IEmployeeService employeeService, IUserAccountService userAccountService, ITimeEntryService timeEntryService)
         {
             _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));

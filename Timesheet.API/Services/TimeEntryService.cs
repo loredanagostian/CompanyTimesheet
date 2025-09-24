@@ -1,20 +1,32 @@
 ﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
-    public class TimeEntryService
+    public class TimeEntryService : ITimeEntryService
     {
+        private readonly IUserAccountService _userAccountService;
         private static List<TimeEntry> _timeEntries = new List<TimeEntry>();
 
-        public TimeEntry CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
+        public TimeEntryService(IUserAccountService userAccountService)
         {
+            _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
+        }
+
+        public TimeEntry? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
+        {
+            var userAccountFound = _userAccountService.FindByEmployeeIdNumber(timeEntryDto.EmployeeIdNumber);
+
+            if (userAccountFound == null)
+                return null;
+
             var newTimeEntry = new TimeEntry
             {
                 TimeEntryId = Guid.NewGuid(),
-                EmployeeIdNumber = timeEntryDto.EmployeeIdNumber,
                 Date = timeEntryDto.Date,
-                HoursWorked = timeEntryDto.HoursWorked
+                HoursWorked = timeEntryDto.HoursWorked,
+                UserAccount = userAccountFound
             };
 
             _timeEntries.Add(newTimeEntry);
@@ -22,14 +34,14 @@ namespace Timesheet.API.Services
             return newTimeEntry;
         }
 
-        public List<TimeEntry> GetTimeEntries() 
-        { 
-            return _timeEntries; 
+        public List<TimeEntry> GetTimeEntries()
+        {
+            return _timeEntries;
         }
 
         public List<TimeEntry> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
         {
-            return _timeEntries.FindAll(t => t.EmployeeIdNumber == employeeIdNumber);
+            return _timeEntries.FindAll(t => t.UserAccount.Employee.EmployeeIdNumber == employeeIdNumber);
         }
     }
 }

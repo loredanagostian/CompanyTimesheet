@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static Timesheet.API.Constants.Enums;
 
 namespace Timesheet.API.Models.DTOs
 {

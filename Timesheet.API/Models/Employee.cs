@@ -1,7 +1,7 @@
-﻿using static Timesheet.API.Constants.Enums;
-
-namespace Timesheet.API.Models
+﻿namespace Timesheet.API.Models
 {
+    public enum ContractType { FullTime, PartTime, Contractor }
+
     public class Employee
     {
         public Guid EmployeeId { get; init; }
@@ -9,5 +9,6 @@ namespace Timesheet.API.Models
         public required string FirstName { get; set; }
         public required string LastName  { get; set; }
         public required ContractType ContractType { get; set; }
+        public List<UserAccount> UserAccounts { get; set; } = new List<UserAccount>();
     }
 }

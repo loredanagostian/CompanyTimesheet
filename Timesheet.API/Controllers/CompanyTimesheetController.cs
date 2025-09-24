@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Timesheet.API.Models;
-using Timesheet.API.Services;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
 {
@@ -9,9 +9,9 @@ namespace Timesheet.API.Controllers
     [ApiController]
     public class CompanyTimesheetController : ControllerBase
     {
-        private readonly CompanyTimesheetService _companyTimesheetService;
+        private readonly ICompanyTimesheetService _companyTimesheetService;
 
-        public CompanyTimesheetController(CompanyTimesheetService companyTimesheetService)
+        public CompanyTimesheetController(ICompanyTimesheetService companyTimesheetService)
         {
             _companyTimesheetService = companyTimesheetService ?? throw new ArgumentNullException(nameof(companyTimesheetService));
         }

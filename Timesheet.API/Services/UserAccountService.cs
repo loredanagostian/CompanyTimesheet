@@ -1,15 +1,15 @@
-﻿using Timesheet.API.Constants;
-using Timesheet.API.Models;
+﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
-    public class UserAccountService
+    public class UserAccountService : IUserAccountService
     {
         private static List<UserAccount> _userAccounts = new List<UserAccount>();
-        private readonly EmployeeService _employeeService;
+        private readonly IEmployeeService _employeeService;
 
-        public UserAccountService(EmployeeService employeeService)
+        public UserAccountService(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
@@ -26,9 +26,9 @@ namespace Timesheet.API.Services
             var userAccount = new UserAccount
             {
                 UserId = Guid.NewGuid(),
-                EmployeeIdNumber = userAccountDto.EmployeeIdNumber,
                 Email = $"{linkedEmployee.FirstName.ToLower()}.{linkedEmployee.LastName.ToLower()}@company.com",
-                Password = "something"
+                Password = "something",
+                Employee = linkedEmployee
             };
 
             _userAccounts.Add(userAccount);
@@ -44,9 +44,9 @@ namespace Timesheet.API.Services
             foreach (var employee in _employees)
             {
                 var newUserAccount = CreateUserAccount(
-                    new CreateUserAccountDto 
-                    { 
-                        EmployeeIdNumber = employee.EmployeeIdNumber 
+                    new CreateUserAccountDto
+                    {
+                        EmployeeIdNumber = employee.EmployeeIdNumber
                     }
                 );
 
@@ -59,7 +59,7 @@ namespace Timesheet.API.Services
 
         public bool DeleteUserAccount(int employeeIdNumber)
         {
-            var userAccountFound = _userAccounts.FirstOrDefault(u => u.EmployeeIdNumber == employeeIdNumber);
+            var userAccountFound = _userAccounts.FirstOrDefault(u => u.Employee.EmployeeIdNumber == employeeIdNumber);
 
             if (userAccountFound == null)
                 return false;
@@ -75,7 +75,7 @@ namespace Timesheet.API.Services
 
         public UserAccount? FindByEmployeeIdNumber(int id)
         {
-            return _userAccounts.FirstOrDefault(u => u.EmployeeIdNumber == id);
+            return _userAccounts.FirstOrDefault(u => u.Employee.EmployeeIdNumber == id);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
-using Timesheet.API.Services;
+using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
 {
@@ -9,12 +9,10 @@ namespace Timesheet.API.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
-        private readonly EmployeeService _employeeService;
-        private readonly UserAccountService _userAccountService;
+        private readonly IUserAccountService _userAccountService;
 
-        public UserAccountsController(EmployeeService employeeService, UserAccountService userAccountService)
+        public UserAccountsController(IUserAccountService userAccountService)
         {
-            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
         }
 
