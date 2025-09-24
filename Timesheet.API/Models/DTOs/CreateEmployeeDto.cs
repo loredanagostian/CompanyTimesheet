@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+using static Timesheet.API.Constants.Enums;
+
+namespace Timesheet.API.Models.DTOs
+{
+    public class CreateEmployeeDto
+    {
+        [Required]
+        public required string FirstName { get; set; }
+
+        [Required]
+        public required string LastName { get; set; }
+
+        [Required]
+        public required ContractType ContractType { get; set; }
+    }
+}
