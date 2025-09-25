@@ -17,13 +17,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<UserAccount>> GetUserAccounts()
+        public ActionResult<List<UserAccountModel>> GetUserAccounts()
         {
             return Ok(_userAccountService.GetUserAccounts());
         }
 
         [HttpPost]
-        public ActionResult<UserAccount> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
+        public ActionResult<UserAccountModel> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
         {
             var newUserAccount = _userAccountService.CreateUserAccount(userAccountDto);
 
@@ -34,13 +34,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost("mockdata")]
-        public ActionResult<List<UserAccount>> CreateUserAccountsList()
+        public ActionResult<List<UserAccountModel>> CreateUserAccountsList()
         {
             return Ok(_userAccountService.GetUserAccountMockData());
         }
 
         [HttpDelete]
-        public ActionResult<UserAccount> DeleteUser(int employeeId) 
+        public ActionResult<UserAccountModel> DeleteUser(int employeeId) 
         {
             var wasUserAccountDeleted = _userAccountService.DeleteUserAccount(employeeId);
 

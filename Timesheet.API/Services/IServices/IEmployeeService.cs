@@ -5,11 +5,11 @@ namespace Timesheet.API.Services.Interfaces
 {
     public interface IEmployeeService
     {
-        Employee CreateEmployee(CreateEmployeeDto createEmployeeDto);
-        Employee? FindByEmployeeIdNumber(int employeeIdNumber);
-        List<Employee> GetEmployees();
-        List<Employee> GetEmployeesMockData();
+        EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto);
+        EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber);
+        List<EmployeeModel> GetEmployees();
+        List<EmployeeModel> GetEmployeesMockData();
         bool RemoveEmployee(int employeeIdNumber);
-        void UpdateEmployeeUserAccounts(UserAccount userAccount);
+        void UpdateEmployeeUserAccounts(UserAccountModel userAccount);
     }
 }

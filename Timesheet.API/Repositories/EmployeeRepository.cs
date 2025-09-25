@@ -6,13 +6,13 @@ namespace Timesheet.API.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private static List<Employee> _employees = new List<Employee>();
+        private static List<EmployeeModel> _employees = new List<EmployeeModel>();
         private static int _employeeCounter = 1;
 
-        public List<Employee> GetEmployeesMockData()
+        public List<EmployeeModel> GetEmployeesMockData()
         {
             _employees.Add(
-                new Employee
+                new EmployeeModel
                 {
                     EmployeeId = _employeeCounter++,
                     FirstName = "Ana",
@@ -23,7 +23,7 @@ namespace Timesheet.API.Repositories
             );
 
             _employees.Add(
-                new Employee
+                new EmployeeModel
                 {
                     EmployeeId = _employeeCounter++,
                     FirstName = "Ion",
@@ -34,7 +34,7 @@ namespace Timesheet.API.Repositories
             );
 
             _employees.Add(
-                new Employee
+                new EmployeeModel
                 {
                     EmployeeId = _employeeCounter++,
                     FirstName = "Maria",
@@ -45,7 +45,7 @@ namespace Timesheet.API.Repositories
             );
 
             _employees.Add(
-                new Employee
+                new EmployeeModel
                 {
                     EmployeeId = _employeeCounter++,
                     FirstName = "Catalin",
@@ -58,9 +58,9 @@ namespace Timesheet.API.Repositories
             return _employees;
         }
 
-        public Employee CreateEmployee(CreateEmployeeDto createEmployeeDto)
+        public EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
-            var employee = new Employee
+            var employee = new EmployeeModel
             {
                 EmployeeId = _employeeCounter++,
                 FirstName = createEmployeeDto.FirstName,
@@ -74,22 +74,22 @@ namespace Timesheet.API.Repositories
             return employee;
         }
 
-        public Employee? FindByEmployeeIdNumber(int employeeIdNumber)
+        public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
         {
             return _employees.FirstOrDefault(e => e.EmployeeId == employeeIdNumber);
         }
 
-        public void RemoveEmployee(Employee employee)
+        public void RemoveEmployee(EmployeeModel employee)
         {
             _employees.Remove(employee);
         }
 
-        public List<Employee> GetEmployees()
+        public List<EmployeeModel> GetEmployees()
         {
             return _employees;
         }
 
-        public void UpdateEmployeeUserAccounts(UserAccount userAccount)
+        public void UpdateEmployeeUserAccounts(UserAccountModel userAccount)
         {
             var employee = FindByEmployeeIdNumber(userAccount.EmployeeId);
 

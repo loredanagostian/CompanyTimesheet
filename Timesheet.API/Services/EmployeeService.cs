@@ -16,7 +16,7 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public Employee CreateEmployee(CreateEmployeeDto createEmployeeDto)
+        public EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
             var newEmployee = _employeeRepository.CreateEmployee(createEmployeeDto);
 
@@ -43,22 +43,22 @@ namespace Timesheet.API.Services
             return true;
         }
 
-        public List<Employee> GetEmployees()
+        public List<EmployeeModel> GetEmployees()
         {
             return _employeeRepository.GetEmployees();
         }
 
-        public Employee? FindByEmployeeIdNumber(int employeeIdNumber)
+        public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
         {
             return _employeeRepository.FindByEmployeeIdNumber(employeeIdNumber);
         }
 
-        public void UpdateEmployeeUserAccounts(UserAccount userAccount)
+        public void UpdateEmployeeUserAccounts(UserAccountModel userAccount)
         {
             _employeeRepository.UpdateEmployeeUserAccounts(userAccount);
         }
 
-        public List<Employee> GetEmployeesMockData()
+        public List<EmployeeModel> GetEmployeesMockData()
         {
             return _employeeRepository.GetEmployeesMockData();
         }

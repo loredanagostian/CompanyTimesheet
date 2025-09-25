@@ -16,7 +16,7 @@ namespace Timesheet.API.Services
             _timeEntryRepository = timeEntryRepository ?? throw new ArgumentNullException(nameof(timeEntryRepository));
         }
 
-        public TimeEntry? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
+        public TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
         {
             var userAccountFound = _userAccountRepository.FindByEmployeeIdNumber(timeEntryDto.EmployeeId);
 
@@ -28,12 +28,12 @@ namespace Timesheet.API.Services
             return newTimeEntry;
         }
 
-        public List<TimeEntry> GetTimeEntries()
+        public List<TimeEntryModel> GetTimeEntries()
         {
             return _timeEntryRepository.GetTimeEntries();
         }
 
-        public List<TimeEntry> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
+        public List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
         {
             return _timeEntryRepository.GetTimeEntriesByEmployeeIdNumber(employeeIdNumber);
         }

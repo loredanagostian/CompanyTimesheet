@@ -16,7 +16,7 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public UserAccount? CreateUserAccount(CreateUserAccountDto userAccountDto)
+        public UserAccountModel? CreateUserAccount(CreateUserAccountDto userAccountDto)
         {
             var linkedEmployee = _employeeService.FindByEmployeeIdNumber(userAccountDto.EmployeeId);
 
@@ -25,16 +25,22 @@ namespace Timesheet.API.Services
                 return null;
             }
 
-            var newUserAccount = _userAccountRepository.CreateUserAccount(linkedEmployee);
+            if (string.IsNullOrEmpty(userAccountDto.Email) || string.IsNullOrEmpty(userAccountDto.Password))
+            {
+                userAccountDto.Email = $"{linkedEmployee.FirstName.ToLower()}.{linkedEmployee.LastName.ToLower()}@company.com";
+                userAccountDto.Password = "DefaultPassword123";
+            }
+
+            var newUserAccount = _userAccountRepository.CreateUserAccount(userAccountDto);
 
             _employeeService.UpdateEmployeeUserAccounts(newUserAccount);
 
             return newUserAccount;
         }
 
-        public List<UserAccount> GetUserAccountMockData()
+        public List<UserAccountModel> GetUserAccountMockData()
         {
-            List<UserAccount> _users = new List<UserAccount>();
+            List<UserAccountModel> _users = new List<UserAccountModel>();
             var _employees = _employeeService.GetEmployeesMockData();
 
             foreach (var employee in _employees)
@@ -42,7 +48,9 @@ namespace Timesheet.API.Services
                 var newUserAccount = CreateUserAccount(
                     new CreateUserAccountDto
                     {
-                        EmployeeId = employee.EmployeeId
+                        EmployeeId = employee.EmployeeId,
+                        Email = $"{employee.FirstName.ToLower()}.{employee.LastName.ToLower()}@company.com",
+                        Password = "DefaultPassword123"
                     }
                 );
 
@@ -69,12 +77,12 @@ namespace Timesheet.API.Services
             return true;
         }
 
-        public List<UserAccount> GetUserAccounts()
+        public List<UserAccountModel> GetUserAccounts()
         {
             return _userAccountRepository.GetAllUserAccounts();
         }
 
-        public UserAccount? FindByEmployeeIdNumber(int id)
+        public UserAccountModel? FindByEmployeeIdNumber(int id)
         {
             return _userAccountRepository.FindByEmployeeIdNumber(id);
         }

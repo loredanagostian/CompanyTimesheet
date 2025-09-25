@@ -19,13 +19,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<TimeEntry>> GetTimeEntries()
+        public ActionResult<List<TimeEntryModel>> GetTimeEntries()
         {
             return Ok(_timeEntryService.GetTimeEntries());
         }
 
         [HttpPost]
-        public ActionResult<TimeEntry> CreateTimeEntry([FromBody] CreateTimeEntryDto timeEntryDto)
+        public ActionResult<TimeEntryModel> CreateTimeEntry([FromBody] CreateTimeEntryDto timeEntryDto)
         {
             var newTimeEntry = _timeEntryService.CreateTimeEntry(timeEntryDto);
 

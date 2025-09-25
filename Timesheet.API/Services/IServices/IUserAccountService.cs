@@ -5,10 +5,10 @@ namespace Timesheet.API.Services.Interfaces
 {
     public interface IUserAccountService
     {
-        UserAccount? CreateUserAccount(CreateUserAccountDto userAccountDto);
+        UserAccountModel? CreateUserAccount(CreateUserAccountDto userAccountDto);
         bool DeleteUserAccount(int employeeIdNumber);
-        UserAccount? FindByEmployeeIdNumber(int id);
-        List<UserAccount> GetUserAccountMockData();
-        List<UserAccount> GetUserAccounts();
+        UserAccountModel? FindByEmployeeIdNumber(int id);
+        List<UserAccountModel> GetUserAccountMockData();
+        List<UserAccountModel> GetUserAccounts();
     }
 }

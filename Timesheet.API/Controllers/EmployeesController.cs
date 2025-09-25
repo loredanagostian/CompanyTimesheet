@@ -18,13 +18,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Employee>> GetEmployees()
+        public ActionResult<List<EmployeeModel>> GetEmployees()
         {
             return Ok(_employeeService.GetEmployees());
         }
 
         [HttpPost]
-        public ActionResult<Employee> CreateEmployee([FromBody] CreateEmployeeDto employeeDto)
+        public ActionResult<EmployeeModel> CreateEmployee([FromBody] CreateEmployeeDto employeeDto)
         {
             var newEmployee = _employeeService.CreateEmployee(employeeDto);
 
@@ -32,7 +32,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<Employee> RemoveEmployee(int employeeIdNumber)
+        public ActionResult<EmployeeModel> RemoveEmployee(int employeeIdNumber)
         {
             var wasEmployeeRemoved = _employeeService.RemoveEmployee(employeeIdNumber);
 

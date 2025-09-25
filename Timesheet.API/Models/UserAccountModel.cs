@@ -1,6 +1,6 @@
 ﻿namespace Timesheet.API.Models
 {
-    public class UserAccount
+    public class UserAccountModel
     {
         public int EmployeeId { get; init; } // FK
         public required string Email { get; set; } // PK

@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Timesheet.API.DbContexts;
 using Timesheet.API.Repositories;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services;
@@ -10,9 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
+
 builder.Services.AddSingleton<IUserAccountRepository, UserAccountRepository>();
 builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddSingleton<ITimeEntryRepository, TimeEntryRepository>();
+
+builder.Services.AddDbContext<TimesheetContext>(dbContextOptions 
+    => dbContextOptions.UseSqlite(
+        builder.Configuration["ConnectionStrings:TimesheetDbConnectionString"]));
 
 builder.Services
     .AddControllers()

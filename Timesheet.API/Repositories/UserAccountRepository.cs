@@ -6,15 +6,15 @@ namespace Timesheet.API.Repositories
 {
     public class UserAccountRepository : IUserAccountRepository
     {
-        private static List<UserAccount> _userAccounts = new List<UserAccount>();
+        private static List<UserAccountModel> _userAccounts = new List<UserAccountModel>();
 
-        public UserAccount CreateUserAccount(Employee employee)
+        public UserAccountModel CreateUserAccount(CreateUserAccountDto userAccountDto)
         {
-            var userAccount = new UserAccount
+            var userAccount = new UserAccountModel
             {
-                Email = $"{employee.FirstName.ToLower()}.{employee.LastName.ToLower()}@company.com",
-                Password = "something",
-                EmployeeId = employee.EmployeeId
+                Email = userAccountDto.Email,
+                Password = userAccountDto.Password,
+                EmployeeId = userAccountDto.EmployeeId
             };
 
             _userAccounts.Add(userAccount);
@@ -22,17 +22,17 @@ namespace Timesheet.API.Repositories
             return userAccount;
         }
 
-        public void DeleteUserAccount(UserAccount userAccount)
+        public void DeleteUserAccount(UserAccountModel userAccount)
         {
             _userAccounts.Remove(userAccount);
         }
 
-        public UserAccount? FindByEmployeeIdNumber(int employeeIdNumber)
+        public UserAccountModel? FindByEmployeeIdNumber(int employeeIdNumber)
         {
             return _userAccounts.FirstOrDefault(u => u.EmployeeId == employeeIdNumber);
         }
 
-        public List<UserAccount> GetAllUserAccounts()
+        public List<UserAccountModel> GetAllUserAccounts()
         {
             return _userAccounts;
         }

@@ -1,6 +1,6 @@
 ﻿namespace Timesheet.API.Models
 {
-    public class TimeEntry
+    public class TimeEntryModel
     {
         public Guid TimeEntryId { get; init; } // PK
         public int EmployeeId { get; init; } // FK
