@@ -1,4 +1,7 @@
-﻿using Timesheet.API.Models;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Timesheet.API.DbContexts;
+using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 
@@ -8,6 +11,15 @@ namespace Timesheet.API.Repositories
     {
         private static List<EmployeeModel> _employees = new List<EmployeeModel>();
         private static int _employeeCounter = 1;
+
+        private readonly TimesheetContext _context;
+        private readonly IMapper _mapper;
+
+        public EmployeeRepository(TimesheetContext context, IMapper mapper)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
 
         public List<EmployeeModel> GetEmployeesMockData()
         {
@@ -74,6 +86,22 @@ namespace Timesheet.API.Repositories
             return employee;
         }
 
+        //public Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        //{
+        //    var employee = new EmployeeModel
+        //    {
+        //        EmployeeId = _employeeCounter++,
+        //        FirstName = createEmployeeDto.FirstName,
+        //        LastName = createEmployeeDto.LastName,
+        //        ContractType = createEmployeeDto.ContractType,
+        //        CNP = createEmployeeDto.CNP
+        //    };
+
+        //    _employees.Add(employee);
+
+        //    return employee;
+        //}
+
         public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
         {
             return _employees.FirstOrDefault(e => e.EmployeeId == employeeIdNumber);
@@ -97,6 +125,24 @@ namespace Timesheet.API.Repositories
             {
                 employee.UserAccounts.Add(userAccount);
             }
+        }
+
+        public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+        {
+            var employees = await _context.Employees.ToListAsync();
+
+            // Without AutoMapper
+            //
+            //return employees.Select(e => new EmployeeModel
+            //{
+            //    EmployeeId = e.EmployeeId,
+            //    FirstName = e.FirstName,
+            //    LastName = e.LastName,
+            //    ContractType = e.ContractType,
+            //    CNP = e.CNP
+            //}).ToList();
+
+            return _mapper.Map<IEnumerable<EmployeeModel>>(employees);
         }
     }
 }

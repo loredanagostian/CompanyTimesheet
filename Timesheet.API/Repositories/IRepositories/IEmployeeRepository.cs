@@ -10,5 +10,6 @@ namespace Timesheet.API.Repositories.IRepositories
         void RemoveEmployee(EmployeeModel employee);
         List<EmployeeModel> GetEmployees();
         void UpdateEmployeeUserAccounts(UserAccountModel userAccount);
+        Task<IEnumerable<EmployeeModel>> GetEmployeesAsync();
     }
 }

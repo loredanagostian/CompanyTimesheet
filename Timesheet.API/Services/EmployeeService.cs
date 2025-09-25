@@ -62,5 +62,10 @@ namespace Timesheet.API.Services
         {
             return _employeeRepository.GetEmployeesMockData();
         }
+
+        public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+        {
+            return await _employeeRepository.GetEmployeesAsync();
+        }
     }
 }

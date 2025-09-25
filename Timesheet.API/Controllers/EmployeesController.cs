@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Services.Interfaces;
@@ -11,10 +12,12 @@ namespace Timesheet.API.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IUserAccountService _userAccountService;
+        private readonly IMapper _mapper;
 
-        public EmployeesController(IEmployeeService employeeService, IUserAccountService userAccountService) {
+        public EmployeesController(IEmployeeService employeeService, IUserAccountService userAccountService, IMapper mapper) {
             _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -50,6 +53,13 @@ namespace Timesheet.API.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet("async")]
+        public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployeesAsync()
+        {
+            var employees = await _employeeService.GetEmployeesAsync();
+            return Ok(employees);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Timesheet.API.Services.Interfaces
         List<EmployeeModel> GetEmployeesMockData();
         bool RemoveEmployee(int employeeIdNumber);
         void UpdateEmployeeUserAccounts(UserAccountModel userAccount);
+        Task<IEnumerable<EmployeeModel>> GetEmployeesAsync();
     }
 }

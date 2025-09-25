@@ -13,9 +13,11 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
 
-builder.Services.AddSingleton<IUserAccountRepository, UserAccountRepository>();
-builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddSingleton<ITimeEntryRepository, TimeEntryRepository>();
+builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<TimesheetContext>(dbContextOptions 
     => dbContextOptions.UseSqlite(
