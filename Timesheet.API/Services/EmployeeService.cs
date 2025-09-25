@@ -1,99 +1,66 @@
 ﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private static List<Employee> _employees = new List<Employee>();
-        private static int _employeeCounter = 1;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUserAccountRepository _userAccountRepository;
 
-        public List<Employee> GetEmployeesMockData()
+        public EmployeeService(IEmployeeRepository employeeRepository, IUserAccountRepository userAccountRepository)
         {
-            _employees.Add(
-                new Employee
-                {
-                    EmployeeId = Guid.NewGuid(),
-                    EmployeeIdNumber = _employeeCounter++,
-                    FirstName = "Ana",
-                    LastName = "Blandiana",
-                    ContractType = ContractType.FullTime
-                }
-            );
-
-            _employees.Add(
-                new Employee
-                {
-                    EmployeeId = Guid.NewGuid(),
-                    EmployeeIdNumber = _employeeCounter++,
-                    FirstName = "Ion",
-                    LastName = "Gladiatorul",
-                    ContractType = ContractType.PartTime
-                }
-            );
-
-            _employees.Add(
-                new Employee
-                {
-                    EmployeeId = Guid.NewGuid(),
-                    EmployeeIdNumber = _employeeCounter++,
-                    FirstName = "Maria",
-                    LastName = "Ioana",
-                    ContractType = ContractType.FullTime
-                }
-            );
-
-            _employees.Add(
-                new Employee
-                {
-                    EmployeeId = Guid.NewGuid(),
-                    EmployeeIdNumber = _employeeCounter++,
-                    FirstName = "Catalin",
-                    LastName = "Botezatul",
-                    ContractType = ContractType.Contractor
-                }
-            );
-
-            return _employees;
+            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
         public Employee CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
-            var employee = new Employee
-            {
-                EmployeeId = Guid.NewGuid(),
-                EmployeeIdNumber = _employeeCounter++,
-                FirstName = createEmployeeDto.FirstName,
-                LastName = createEmployeeDto.LastName,
-                ContractType = createEmployeeDto.ContractType
-            };
+            var newEmployee = _employeeRepository.CreateEmployee(createEmployeeDto);
 
-            _employees.Add(employee);
-
-            return employee;
+            return newEmployee;
         }
 
         public bool RemoveEmployee(int employeeIdNumber)
         {
-            var employeeFound = _employees.FirstOrDefault(e => e.EmployeeIdNumber == employeeIdNumber);
+            var employeeFound = _employeeRepository.FindByEmployeeIdNumber(employeeIdNumber);
 
             if (employeeFound == null)
                 return false;
 
-            _employees.Remove(employeeFound);
+            if (employeeFound.UserAccounts.Any())
+            {
+                foreach (var userAccount in employeeFound.UserAccounts)
+                {
+                    _userAccountRepository.DeleteUserAccount(userAccount);
+                }
+            }
+
+            _employeeRepository.RemoveEmployee(employeeFound);
 
             return true;
         }
 
         public List<Employee> GetEmployees()
         {
-            return _employees;
+            return _employeeRepository.GetEmployees();
         }
 
         public Employee? FindByEmployeeIdNumber(int employeeIdNumber)
         {
-            return _employees.FirstOrDefault(e => e.EmployeeIdNumber == employeeIdNumber);
+            return _employeeRepository.FindByEmployeeIdNumber(employeeIdNumber);
+        }
+
+        public void UpdateEmployeeUserAccounts(UserAccount userAccount)
+        {
+            _employeeRepository.UpdateEmployeeUserAccounts(userAccount);
+        }
+
+        public List<Employee> GetEmployeesMockData()
+        {
+            return _employeeRepository.GetEmployeesMockData();
         }
     }
 }

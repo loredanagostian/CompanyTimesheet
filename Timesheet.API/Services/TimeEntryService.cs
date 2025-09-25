@@ -1,47 +1,41 @@
 ﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
     public class TimeEntryService : ITimeEntryService
     {
-        private readonly IUserAccountService _userAccountService;
-        private static List<TimeEntry> _timeEntries = new List<TimeEntry>();
+        private readonly IUserAccountRepository _userAccountRepository;
+        private readonly ITimeEntryRepository _timeEntryRepository;
 
-        public TimeEntryService(IUserAccountService userAccountService)
+        public TimeEntryService(IUserAccountRepository userAccountRepository, ITimeEntryRepository timeEntryRepository)
         {
-            _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
+            _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
+            _timeEntryRepository = timeEntryRepository ?? throw new ArgumentNullException(nameof(timeEntryRepository));
         }
 
         public TimeEntry? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
         {
-            var userAccountFound = _userAccountService.FindByEmployeeIdNumber(timeEntryDto.EmployeeIdNumber);
+            var userAccountFound = _userAccountRepository.FindByEmployeeIdNumber(timeEntryDto.EmployeeId);
 
             if (userAccountFound == null)
                 return null;
 
-            var newTimeEntry = new TimeEntry
-            {
-                TimeEntryId = Guid.NewGuid(),
-                Date = timeEntryDto.Date,
-                HoursWorked = timeEntryDto.HoursWorked,
-                UserAccount = userAccountFound
-            };
-
-            _timeEntries.Add(newTimeEntry);
+           var newTimeEntry = _timeEntryRepository.CreateTimeEntry(timeEntryDto);
 
             return newTimeEntry;
         }
 
         public List<TimeEntry> GetTimeEntries()
         {
-            return _timeEntries;
+            return _timeEntryRepository.GetTimeEntries();
         }
 
         public List<TimeEntry> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
         {
-            return _timeEntries.FindAll(t => t.UserAccount.Employee.EmployeeIdNumber == employeeIdNumber);
+            return _timeEntryRepository.GetTimeEntriesByEmployeeIdNumber(employeeIdNumber);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Timesheet.API.Controllers
         {
             var newEmployee = _employeeService.CreateEmployee(employeeDto);
 
-            return CreatedAtAction(nameof(CreateEmployee), new { id = newEmployee.EmployeeIdNumber }, newEmployee);
+            return CreatedAtAction(nameof(CreateEmployee), new { id = newEmployee.EmployeeId }, newEmployee);
         }
 
         [HttpDelete]

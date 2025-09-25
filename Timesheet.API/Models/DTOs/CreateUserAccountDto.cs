@@ -5,6 +5,6 @@ namespace Timesheet.API.Models.DTOs
     public class CreateUserAccountDto
     {
         [Required]
-        public int EmployeeIdNumber { get; init; }
+        public int EmployeeId { get; set; }
     }
 }

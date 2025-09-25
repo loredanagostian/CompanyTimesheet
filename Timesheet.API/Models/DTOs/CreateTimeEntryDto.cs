@@ -5,7 +5,7 @@ namespace Timesheet.API.Models.DTOs
     public class CreateTimeEntryDto
     {
         [Required]
-        public required int EmployeeIdNumber { get; set; }
+        public required int EmployeeId { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

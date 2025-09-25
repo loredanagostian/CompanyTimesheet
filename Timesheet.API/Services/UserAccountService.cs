@@ -1,39 +1,35 @@
 ﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Services
 {
     public class UserAccountService : IUserAccountService
     {
-        private static List<UserAccount> _userAccounts = new List<UserAccount>();
         private readonly IEmployeeService _employeeService;
+        private readonly IUserAccountRepository _userAccountRepository;
 
-        public UserAccountService(IEmployeeService employeeService)
+        public UserAccountService(IEmployeeService employeeService, IUserAccountRepository userAccountRepository)
         {
-            _employeeService = employeeService;
+            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
+            _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
         public UserAccount? CreateUserAccount(CreateUserAccountDto userAccountDto)
         {
-            var linkedEmployee = _employeeService.FindByEmployeeIdNumber(userAccountDto.EmployeeIdNumber);
+            var linkedEmployee = _employeeService.FindByEmployeeIdNumber(userAccountDto.EmployeeId);
 
             if (linkedEmployee == null)
             {
                 return null;
             }
 
-            var userAccount = new UserAccount
-            {
-                UserId = Guid.NewGuid(),
-                Email = $"{linkedEmployee.FirstName.ToLower()}.{linkedEmployee.LastName.ToLower()}@company.com",
-                Password = "something",
-                Employee = linkedEmployee
-            };
+            var newUserAccount = _userAccountRepository.CreateUserAccount(linkedEmployee);
 
-            _userAccounts.Add(userAccount);
+            _employeeService.UpdateEmployeeUserAccounts(newUserAccount);
 
-            return userAccount;
+            return newUserAccount;
         }
 
         public List<UserAccount> GetUserAccountMockData()
@@ -46,7 +42,7 @@ namespace Timesheet.API.Services
                 var newUserAccount = CreateUserAccount(
                     new CreateUserAccountDto
                     {
-                        EmployeeIdNumber = employee.EmployeeIdNumber
+                        EmployeeId = employee.EmployeeId
                     }
                 );
 
@@ -59,23 +55,28 @@ namespace Timesheet.API.Services
 
         public bool DeleteUserAccount(int employeeIdNumber)
         {
-            var userAccountFound = _userAccounts.FirstOrDefault(u => u.Employee.EmployeeIdNumber == employeeIdNumber);
+            var userAccountFound = _userAccountRepository.FindByEmployeeIdNumber(employeeIdNumber);
 
             if (userAccountFound == null)
                 return false;
 
-            _userAccounts.Remove(userAccountFound);
+            var linkedEmployee = _employeeService.FindByEmployeeIdNumber(employeeIdNumber);
+
+            linkedEmployee!.UserAccounts.Remove(userAccountFound);
+
+            _userAccountRepository.DeleteUserAccount(userAccountFound);
+
             return true;
         }
 
         public List<UserAccount> GetUserAccounts()
         {
-            return _userAccounts;
+            return _userAccountRepository.GetAllUserAccounts();
         }
 
         public UserAccount? FindByEmployeeIdNumber(int id)
         {
-            return _userAccounts.FirstOrDefault(u => u.Employee.EmployeeIdNumber == id);
+            return _userAccountRepository.FindByEmployeeIdNumber(id);
         }
     }
 }

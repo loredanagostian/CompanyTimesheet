@@ -2,9 +2,8 @@
 {
     public class UserAccount
     {
-        public Guid UserId { get; init; }
-        public required string Email { get; set; }
+        public int EmployeeId { get; init; } // FK
+        public required string Email { get; set; } // PK
         public required string Password { get; set; }
-        public required Employee Employee { get; set; }
     }
 }

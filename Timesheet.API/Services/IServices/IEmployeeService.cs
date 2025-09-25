@@ -10,5 +10,6 @@ namespace Timesheet.API.Services.Interfaces
         List<Employee> GetEmployees();
         List<Employee> GetEmployeesMockData();
         bool RemoveEmployee(int employeeIdNumber);
+        void UpdateEmployeeUserAccounts(UserAccount userAccount);
     }
 }
