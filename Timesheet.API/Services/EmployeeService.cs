@@ -67,5 +67,13 @@ namespace Timesheet.API.Services
         {
             return await _employeeRepository.GetEmployeesAsync();
         }
+
+        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        {
+            return await _employeeRepository.CreateEmployeeAsync(createEmployeeDto);
+        }
+
+        public Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
+            => _employeeRepository.GetEmployeeByIdAsync(id);
     }
 }

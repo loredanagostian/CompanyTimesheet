@@ -31,7 +31,7 @@ namespace Timesheet.API.Controllers
         {
             var newEmployee = _employeeService.CreateEmployee(employeeDto);
 
-            return CreatedAtAction(nameof(CreateEmployee), new { id = newEmployee.EmployeeId }, newEmployee);
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);
         }
 
         [HttpDelete]
@@ -59,7 +59,25 @@ namespace Timesheet.API.Controllers
         public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployeesAsync()
         {
             var employees = await _employeeService.GetEmployeesAsync();
+            
             return Ok(employees);
+        }
+
+        [HttpPost("async")]
+        public async Task<ActionResult<EmployeeModel>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
+        {
+            var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
+            
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);
+        }
+
+        [HttpGet("{id}", Name = "GetEmployeeById")]
+        public async Task<ActionResult<EmployeeModel>> GetEmployeeById(int id)
+        {
+            var employee = await _employeeService.GetEmployeeByIdAsync(id);
+            if (employee is null) return NotFound();
+            
+            return Ok(employee);
         }
     }
 }

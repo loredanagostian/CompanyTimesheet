@@ -8,8 +8,8 @@ namespace Timesheet.API.Entities
     public class Employee
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public required int EmployeeId { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public required int EmployeeId { get; set; }
 
         [Required]
         public required string CNP { get; init; }

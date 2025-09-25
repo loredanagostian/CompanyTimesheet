@@ -144,5 +144,20 @@ namespace Timesheet.API.Repositories
 
             return _mapper.Map<IEnumerable<EmployeeModel>>(employees);
         }
+
+        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        {
+            var employeeEntity = _mapper.Map<Entities.Employee>(createEmployeeDto);
+            _context.Employees.Add(employeeEntity);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EmployeeModel>(employeeEntity);
+        }
+
+        public async Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
+        {
+            var entity = await _context.Employees.FindAsync(id);
+            return entity is null ? null : _mapper.Map<EmployeeModel>(entity);
+        }
     }
 }

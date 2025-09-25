@@ -12,5 +12,7 @@ namespace Timesheet.API.Services.Interfaces
         bool RemoveEmployee(int employeeIdNumber);
         void UpdateEmployeeUserAccounts(UserAccountModel userAccount);
         Task<IEnumerable<EmployeeModel>> GetEmployeesAsync();
+        Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
+        Task<EmployeeModel?> GetEmployeeByIdAsync(int employeeIdNumber);
     }
 }

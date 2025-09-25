@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Timesheet.API.Entities;
+using Timesheet.API.Models;
+using Timesheet.API.Models.DTOs;
 
 namespace Timesheet.API.Profiles
 {
@@ -6,7 +9,8 @@ namespace Timesheet.API.Profiles
     {
         public EmployeeProfile() 
         { 
-            CreateMap<Entities.Employee, Models.EmployeeModel>();
+            CreateMap<Employee, EmployeeModel>();
+            CreateMap<CreateEmployeeDto, Employee>();
         }
     }
 }
