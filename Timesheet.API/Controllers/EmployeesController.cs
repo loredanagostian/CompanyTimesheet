@@ -20,42 +20,42 @@ namespace Timesheet.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        //[HttpGet]
+        //private ActionResult<List<EmployeeModel>> GetEmployees()
+        //{
+        //    return Ok(_employeeService.GetEmployees());
+        //}
+
+        //[HttpPost]
+        //private ActionResult<EmployeeModel> CreateEmployee([FromBody] CreateEmployeeDto employeeDto)
+        //{
+        //    var newEmployee = _employeeService.CreateEmployee(employeeDto);
+
+        //    return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);
+        //}
+
+        //[HttpDelete]
+        //private ActionResult<EmployeeModel> RemoveEmployee(int employeeIdNumber)
+        //{
+        //    var wasEmployeeRemoved = _employeeService.RemoveEmployee(employeeIdNumber);
+
+        //    if (!wasEmployeeRemoved)
+        //        return NotFound("No Employee was found with this ID.");
+
+        //    var userAccountLinked = _userAccountService.FindByEmployeeIdNumber(employeeIdNumber);
+
+        //    if (userAccountLinked != null && userAccountLinked != default)
+        //    {
+        //        var wasUserAccountRemoved = _userAccountService.DeleteUserAccount(employeeIdNumber);
+
+        //        if (!wasUserAccountRemoved)
+        //            return NotFound("No User Account was found for this Employee ID.");
+        //    }
+
+        //    return NoContent();
+        //}
+
         [HttpGet]
-        private ActionResult<List<EmployeeModel>> GetEmployees()
-        {
-            return Ok(_employeeService.GetEmployees());
-        }
-
-        [HttpPost]
-        private ActionResult<EmployeeModel> CreateEmployee([FromBody] CreateEmployeeDto employeeDto)
-        {
-            var newEmployee = _employeeService.CreateEmployee(employeeDto);
-
-            return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);
-        }
-
-        [HttpDelete]
-        private ActionResult<EmployeeModel> RemoveEmployee(int employeeIdNumber)
-        {
-            var wasEmployeeRemoved = _employeeService.RemoveEmployee(employeeIdNumber);
-
-            if (!wasEmployeeRemoved)
-                return NotFound("No Employee was found with this ID.");
-
-            var userAccountLinked = _userAccountService.FindByEmployeeIdNumber(employeeIdNumber);
-
-            if (userAccountLinked != null && userAccountLinked != default)
-            {
-                var wasUserAccountRemoved = _userAccountService.DeleteUserAccount(employeeIdNumber);
-
-                if (!wasUserAccountRemoved)
-                    return NotFound("No User Account was found for this Employee ID.");
-            }
-
-            return NoContent();
-        }
-
-        [HttpGet("async")]
         public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployeesAsync()
         {
             var employees = await _employeeService.GetEmployeesAsync();
@@ -63,7 +63,7 @@ namespace Timesheet.API.Controllers
             return Ok(employees);
         }
 
-        [HttpPost("async")]
+        [HttpPost]
         public async Task<ActionResult<EmployeeModel>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
         {
             var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
@@ -80,7 +80,7 @@ namespace Timesheet.API.Controllers
             return Ok(employee);
         }
 
-        [HttpDelete("async")]
+        [HttpDelete]
         public async Task<ActionResult> RemoveEmployeeAsync(int employeeIdNumber)
         {
             await _employeeService.RemoveEmployeeAsync(employeeIdNumber);

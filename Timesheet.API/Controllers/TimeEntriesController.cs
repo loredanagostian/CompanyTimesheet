@@ -18,21 +18,21 @@ namespace Timesheet.API.Controllers
             _timeEntryService = timeEntryService ?? throw new ArgumentNullException(nameof(timeEntryService));
         }
 
-        [HttpGet]
-        public ActionResult<List<TimeEntryModel>> GetTimeEntries()
-        {
-            return Ok(_timeEntryService.GetTimeEntries());
-        }
+        //[HttpGet]
+        //public ActionResult<List<TimeEntryModel>> GetTimeEntries()
+        //{
+        //    return Ok(_timeEntryService.GetTimeEntries());
+        //}
 
-        [HttpPost]
-        public ActionResult<TimeEntryModel> CreateTimeEntry([FromBody] CreateTimeEntryDto timeEntryDto)
-        {
-            var newTimeEntry = _timeEntryService.CreateTimeEntry(timeEntryDto);
+        //[HttpPost]
+        //public ActionResult<TimeEntryModel> CreateTimeEntry([FromBody] CreateTimeEntryDto timeEntryDto)
+        //{
+        //    var newTimeEntry = _timeEntryService.CreateTimeEntry(timeEntryDto);
 
-            if (newTimeEntry == null)
-                return NotFound("No Employee was found with this ID.");
+        //    if (newTimeEntry == null)
+        //        return NotFound("No Employee was found with this ID.");
 
-            return Ok(newTimeEntry);
-        }
+        //    return Ok(newTimeEntry);
+        //}
     }
 }

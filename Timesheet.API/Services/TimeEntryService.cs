@@ -16,26 +16,26 @@ namespace Timesheet.API.Services
             _timeEntryRepository = timeEntryRepository ?? throw new ArgumentNullException(nameof(timeEntryRepository));
         }
 
-        public TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
-        {
-            var userAccountFound = _userAccountRepository.FindByEmployeeIdNumber(timeEntryDto.EmployeeId);
+        //public TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
+        //{
+        //    var userAccountFound = _userAccountRepository.FindByEmployeeIdNumber(timeEntryDto.EmployeeId);
 
-            if (userAccountFound == null)
-                return null;
+        //    if (userAccountFound == null)
+        //        return null;
 
-           var newTimeEntry = _timeEntryRepository.CreateTimeEntry(timeEntryDto);
+        //   var newTimeEntry = _timeEntryRepository.CreateTimeEntry(timeEntryDto);
 
-            return newTimeEntry;
-        }
+        //    return newTimeEntry;
+        //}
 
-        public List<TimeEntryModel> GetTimeEntries()
-        {
-            return _timeEntryRepository.GetTimeEntries();
-        }
+        //public List<TimeEntryModel> GetTimeEntries()
+        //{
+        //    return _timeEntryRepository.GetTimeEntries();
+        //}
 
-        public List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
-        {
-            return _timeEntryRepository.GetTimeEntriesByEmployeeIdNumber(employeeIdNumber);
-        }
+        //public List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
+        //{
+        //    return _timeEntryRepository.GetTimeEntriesByEmployeeIdNumber(employeeIdNumber);
+        //}
     }
 }

@@ -16,41 +16,41 @@ namespace Timesheet.API.Controllers
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
         }
 
-        [HttpGet]
-        private ActionResult<List<UserAccountModel>> GetUserAccounts()
-        {
-            return Ok(_userAccountService.GetUserAccounts());
-        }
+        //[HttpGet]
+        //private ActionResult<List<UserAccountModel>> GetUserAccounts()
+        //{
+        //    return Ok(_userAccountService.GetUserAccounts());
+        //}
+
+        //[HttpPost]
+        //private ActionResult<UserAccountModel> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
+        //{
+        //    var newUserAccount = _userAccountService.CreateUserAccount(userAccountDto);
+
+        //    if (newUserAccount == null)
+        //        return NotFound("No Employee was found with this ID.");
+
+        //    return Ok(newUserAccount);
+        //}
+
+        //[HttpPost("mockdata")]
+        //private ActionResult<List<UserAccountModel>> CreateUserAccountsList()
+        //{
+        //    return Ok(_userAccountService.GetUserAccountMockData());
+        //}
+
+        //[HttpDelete]
+        //private ActionResult<UserAccountModel> DeleteUser(int employeeId) 
+        //{
+        //    var wasUserAccountDeleted = _userAccountService.DeleteUserAccount(employeeId);
+
+        //    if (!wasUserAccountDeleted)
+        //        return NotFound("No Employee was found with this ID.");
+
+        //    return NoContent();
+        //}
 
         [HttpPost]
-        private ActionResult<UserAccountModel> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
-        {
-            var newUserAccount = _userAccountService.CreateUserAccount(userAccountDto);
-
-            if (newUserAccount == null)
-                return NotFound("No Employee was found with this ID.");
-
-            return Ok(newUserAccount);
-        }
-
-        [HttpPost("mockdata")]
-        private ActionResult<List<UserAccountModel>> CreateUserAccountsList()
-        {
-            return Ok(_userAccountService.GetUserAccountMockData());
-        }
-
-        [HttpDelete]
-        private ActionResult<UserAccountModel> DeleteUser(int employeeId) 
-        {
-            var wasUserAccountDeleted = _userAccountService.DeleteUserAccount(employeeId);
-
-            if (!wasUserAccountDeleted)
-                return NotFound("No Employee was found with this ID.");
-
-            return NoContent();
-        }
-
-        [HttpPost("async")]
         public async Task<ActionResult<UserAccountModel>> CreateUserAsync([FromBody] CreateUserAccountDto userAccountDto)
         {
             var newUserAccount = await _userAccountService.CreateUserAccountAsync(userAccountDto);
@@ -61,14 +61,14 @@ namespace Timesheet.API.Controllers
             return Ok(newUserAccount);
         }
 
-        [HttpGet("async")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<UserAccountModel>>> GetUserAccountsAsync()
         {
             var userAccounts = await _userAccountService.GetUserAccountsAsync();
             return Ok(userAccounts);
         }
 
-        [HttpDelete("async")]
+        [HttpDelete]
         public async Task<ActionResult> DeleteUserAsync(int employeeId)
         {
             var userAccountDeletedStatus = await _userAccountService.DeleteUserAccountAsync(employeeId);

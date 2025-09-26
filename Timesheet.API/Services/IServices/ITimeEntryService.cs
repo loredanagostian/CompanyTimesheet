@@ -5,8 +5,8 @@ namespace Timesheet.API.Services.Interfaces
 {
     public interface ITimeEntryService
     {
-        TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto);
-        List<TimeEntryModel> GetTimeEntries();
-        List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber);
+        //TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto);
+        //List<TimeEntryModel> GetTimeEntries();
+        //List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber);
     }
 }

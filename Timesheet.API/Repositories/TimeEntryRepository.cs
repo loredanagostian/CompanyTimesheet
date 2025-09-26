@@ -6,9 +6,9 @@ namespace Timesheet.API.Repositories
 {
     public class TimeEntryRepository : ITimeEntryRepository
     {
-        private static List<TimeEntryModel> _timeEntries = new List<TimeEntryModel>();
+        //private static List<TimeEntryModel> _timeEntries = new List<TimeEntryModel>();
 
-        public TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
+        private TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
         {
             var newTimeEntry = new TimeEntryModel
             {
@@ -23,12 +23,12 @@ namespace Timesheet.API.Repositories
             return newTimeEntry;
         }
 
-        public List<TimeEntryModel> GetTimeEntries()
+        private List<TimeEntryModel> GetTimeEntries()
         {
             return _timeEntries;
         }
 
-        public List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
+        private List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
         {
             return _timeEntries.FindAll(t => t.EmployeeId == employeeIdNumber);
         }

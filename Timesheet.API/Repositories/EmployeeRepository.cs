@@ -10,8 +10,8 @@ namespace Timesheet.API.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private static List<EmployeeModel> _employees = new List<EmployeeModel>();
-        private static int _employeeCounter = 1;
+        //private static List<EmployeeModel> _employees = new List<EmployeeModel>();
+        //private static int _employeeCounter = 1;
 
         private readonly TimesheetContext _context;
         private readonly IMapper _mapper;
@@ -22,72 +22,56 @@ namespace Timesheet.API.Repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public List<EmployeeModel> GetEmployeesMockData()
-        {
-            _employees.Add(
-                new EmployeeModel
-                {
-                    EmployeeId = _employeeCounter++,
-                    FirstName = "Ana",
-                    LastName = "Blandiana",
-                    ContractType = ContractType.FullTime,
-                    CNP = "1234567890123"
-                }
-            );
+        //public List<EmployeeModel> GetEmployeesMockData()
+        //{
+        //    _employees.Add(
+        //        new EmployeeModel
+        //        {
+        //            EmployeeId = _employeeCounter++,
+        //            FirstName = "Ana",
+        //            LastName = "Blandiana",
+        //            ContractType = ContractType.FullTime,
+        //            CNP = "1234567890123"
+        //        }
+        //    );
 
-            _employees.Add(
-                new EmployeeModel
-                {
-                    EmployeeId = _employeeCounter++,
-                    FirstName = "Ion",
-                    LastName = "Gladiatorul",
-                    ContractType = ContractType.PartTime,
-                    CNP = "9876543210987"
-                }
-            );
+        //    _employees.Add(
+        //        new EmployeeModel
+        //        {
+        //            EmployeeId = _employeeCounter++,
+        //            FirstName = "Ion",
+        //            LastName = "Gladiatorul",
+        //            ContractType = ContractType.PartTime,
+        //            CNP = "9876543210987"
+        //        }
+        //    );
 
-            _employees.Add(
-                new EmployeeModel
-                {
-                    EmployeeId = _employeeCounter++,
-                    FirstName = "Maria",
-                    LastName = "Ioana",
-                    ContractType = ContractType.FullTime,
-                    CNP = "4567891234567"
-                }
-            );
+        //    _employees.Add(
+        //        new EmployeeModel
+        //        {
+        //            EmployeeId = _employeeCounter++,
+        //            FirstName = "Maria",
+        //            LastName = "Ioana",
+        //            ContractType = ContractType.FullTime,
+        //            CNP = "4567891234567"
+        //        }
+        //    );
 
-            _employees.Add(
-                new EmployeeModel
-                {
-                    EmployeeId = _employeeCounter++,
-                    FirstName = "Catalin",
-                    LastName = "Botezatul",
-                    ContractType = ContractType.Contractor,
-                    CNP = "7891234567891"
-                }
-            );
+        //    _employees.Add(
+        //        new EmployeeModel
+        //        {
+        //            EmployeeId = _employeeCounter++,
+        //            FirstName = "Catalin",
+        //            LastName = "Botezatul",
+        //            ContractType = ContractType.Contractor,
+        //            CNP = "7891234567891"
+        //        }
+        //    );
 
-            return _employees;
-        }
+        //    return _employees;
+        //}
 
-        public EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto)
-        {
-            var employee = new EmployeeModel
-            {
-                EmployeeId = _employeeCounter++,
-                FirstName = createEmployeeDto.FirstName,
-                LastName = createEmployeeDto.LastName,
-                ContractType = createEmployeeDto.ContractType,
-                CNP = createEmployeeDto.CNP
-            };
-
-            _employees.Add(employee);
-
-            return employee;
-        }
-
-        //public Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        //public EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto)
         //{
         //    var employee = new EmployeeModel
         //    {
@@ -103,30 +87,46 @@ namespace Timesheet.API.Repositories
         //    return employee;
         //}
 
-        public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
-        {
-            return _employees.FirstOrDefault(e => e.EmployeeId == employeeIdNumber);
-        }
+        ////public Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        ////{
+        ////    var employee = new EmployeeModel
+        ////    {
+        ////        EmployeeId = _employeeCounter++,
+        ////        FirstName = createEmployeeDto.FirstName,
+        ////        LastName = createEmployeeDto.LastName,
+        ////        ContractType = createEmployeeDto.ContractType,
+        ////        CNP = createEmployeeDto.CNP
+        ////    };
 
-        public void RemoveEmployee(EmployeeModel employee)
-        {
-            _employees.Remove(employee);
-        }
+        ////    _employees.Add(employee);
 
-        public List<EmployeeModel> GetEmployees()
-        {
-            return _employees;
-        }
+        ////    return employee;
+        ////}
 
-        public void UpdateEmployeeUserAccounts(UserAccountModel userAccount)
-        {
-            var employee = FindByEmployeeIdNumber(userAccount.EmployeeId);
+        //public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
+        //{
+        //    return _employees.FirstOrDefault(e => e.EmployeeId == employeeIdNumber);
+        //}
 
-            if (employee != null)
-            {
-                employee.UserAccounts.Add(userAccount);
-            }
-        }
+        //public void RemoveEmployee(EmployeeModel employee)
+        //{
+        //    _employees.Remove(employee);
+        //}
+
+        //public List<EmployeeModel> GetEmployees()
+        //{
+        //    return _employees;
+        //}
+
+        //public void UpdateEmployeeUserAccounts(UserAccountModel userAccount)
+        //{
+        //    var employee = FindByEmployeeIdNumber(userAccount.EmployeeId);
+
+        //    if (employee != null)
+        //    {
+        //        employee.UserAccounts.Add(userAccount);
+        //    }
+        //}
 
         public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
         {
