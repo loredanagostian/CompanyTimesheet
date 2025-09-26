@@ -13,6 +13,9 @@ namespace Timesheet.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    /// <summary>
+    /// Controller for handling user authentication and JWT token generation.
+    /// </summary>
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -30,6 +33,11 @@ namespace Timesheet.API.Controllers
             public string? Password { get; set; }
         }
 
+        /// <summary>
+        /// Authenticates a user using the provided email and password, and returns a JWT token if successful.
+        /// </summary>
+        /// <param name="authenticationRequestBody">The authentication request containing email and password.</param>
+        /// <returns>A JWT token string if authentication is successful; otherwise, an error response.</returns>
         [HttpPost("authenticate")]
         public async Task<ActionResult<string>> Authenticate([FromBody] AuthenticationRequestBody authenticationRequestBody)
         {

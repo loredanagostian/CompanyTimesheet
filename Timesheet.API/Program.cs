@@ -54,11 +54,11 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "My API",
+        Title = "Timesheet.API",
         Version = "v1"
     });
 
-    // ?? Add the security definition
+    // Add the security definition
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Enter 'Bearer' followed by a space and your JWT token."
     });
 
-    // ?? Apply the security globally to all endpoints
+    // Apply the security globally to all endpoints
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -84,6 +84,10 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+
+    var xmlCommentsFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+    c.IncludeXmlComments(xmlCommentsFullPath);
 });
 
 var app = builder.Build();
