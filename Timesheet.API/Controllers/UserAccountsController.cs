@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Services.Interfaces;
@@ -7,6 +8,7 @@ namespace Timesheet.API.Controllers
 {
     [Route("api/timesheet/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
