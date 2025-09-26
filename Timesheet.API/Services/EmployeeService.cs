@@ -1,4 +1,5 @@
-﻿using Timesheet.API.Models;
+﻿using Timesheet.API.Entities;
+using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
@@ -75,5 +76,21 @@ namespace Timesheet.API.Services
 
         public Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
             => _employeeRepository.GetEmployeeByIdAsync(id);
+
+        public async Task RemoveEmployeeAsync(int id)
+        {
+            var employee = await _employeeRepository.FindEmployeeByIdAsync(id);
+            if (employee is null)
+                throw new KeyNotFoundException($"No Employee was found with ID {id}.");
+
+            await _employeeRepository.RemoveEmployeeAsync(employee);
+
+            await _userAccountRepository.DeleteUserAccountsByEmployeeIdAsync(id);
+        }
+
+        public async Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount)
+        {
+            await _employeeRepository.UpdateEmployeeUserAccountsAsync(userAccount);
+        }
     }
 }

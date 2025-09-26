@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
+using Timesheet.API.Entities;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
@@ -129,7 +130,10 @@ namespace Timesheet.API.Repositories
 
         public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
         {
-            var employees = await _context.Employees.ToListAsync();
+            var employees = await _context.Employees
+                .Include(e => e.UserAccounts)
+                .Include(e => e.TimeEntries)
+                .ToListAsync();
 
             // Without AutoMapper
             //
@@ -147,7 +151,7 @@ namespace Timesheet.API.Repositories
 
         public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
-            var employeeEntity = _mapper.Map<Entities.Employee>(createEmployeeDto);
+            var employeeEntity = _mapper.Map<Employee>(createEmployeeDto);
             _context.Employees.Add(employeeEntity);
             await _context.SaveChangesAsync();
 
@@ -156,8 +160,35 @@ namespace Timesheet.API.Repositories
 
         public async Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
         {
-            var entity = await _context.Employees.FindAsync(id);
+            var entity = await FindEmployeeByIdAsync(id);
             return entity is null ? null : _mapper.Map<EmployeeModel>(entity);
+        }
+
+        public async Task<Employee?> FindEmployeeByIdAsync(int id)
+        {
+            return await _context.Employees.FindAsync(id);
+        }
+
+        public async Task RemoveEmployeeAsync(Employee employee)
+        {
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount)
+        {
+            var employee = await FindEmployeeByIdAsync(userAccount.EmployeeId);
+
+            if (employee != null)
+            {
+                if (employee.UserAccounts == null)
+                    employee.UserAccounts = new List<UserAccount>();
+
+                if (!employee.UserAccounts.Contains(userAccount))
+                    employee.UserAccounts.Add(userAccount);
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

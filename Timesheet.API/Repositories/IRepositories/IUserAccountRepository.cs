@@ -1,4 +1,5 @@
-﻿using Timesheet.API.Models;
+﻿using Timesheet.API.Entities;
+using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 
 namespace Timesheet.API.Repositories.IRepositories
@@ -9,5 +10,8 @@ namespace Timesheet.API.Repositories.IRepositories
         void DeleteUserAccount(UserAccountModel userAccount);
         UserAccountModel? FindByEmployeeIdNumber(int employeeIdNumber);
         List<UserAccountModel> GetAllUserAccounts();
+        Task<int> DeleteUserAccountsByEmployeeIdAsync(int id);
+        Task<(UserAccountModel?, UserAccount?)> CreateUserAccountAsync(CreateUserAccountDto userAccountDto);
+        Task<IEnumerable<UserAccountModel>> GetUserAccountsAsync();
     }
 }

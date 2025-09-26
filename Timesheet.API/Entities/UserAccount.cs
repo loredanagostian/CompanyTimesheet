@@ -6,7 +6,6 @@ namespace Timesheet.API.Entities
     public class UserAccount
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public required string Email { get; set; }
 
         [ForeignKey("EmployeeId")]

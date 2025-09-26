@@ -1,4 +1,5 @@
-﻿using Timesheet.API.Models;
+﻿using Timesheet.API.Entities;
+using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 
 namespace Timesheet.API.Repositories.IRepositories
@@ -14,5 +15,8 @@ namespace Timesheet.API.Repositories.IRepositories
         Task<IEnumerable<EmployeeModel>> GetEmployeesAsync();
         Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
         Task<EmployeeModel?> GetEmployeeByIdAsync(int employeeIdNumber);
+        Task RemoveEmployeeAsync(Employee employee);
+        Task<Employee?> FindEmployeeByIdAsync(int id);
+        Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
     }
 }

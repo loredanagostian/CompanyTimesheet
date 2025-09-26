@@ -10,5 +10,8 @@ namespace Timesheet.API.Services.Interfaces
         UserAccountModel? FindByEmployeeIdNumber(int id);
         List<UserAccountModel> GetUserAccountMockData();
         List<UserAccountModel> GetUserAccounts();
+        Task<UserAccountModel?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto);
+        Task<IEnumerable<UserAccountModel>> GetUserAccountsAsync();
+        Task<int> DeleteUserAccountAsync(int id);
     }
 }

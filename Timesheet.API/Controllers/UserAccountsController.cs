@@ -17,13 +17,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<UserAccountModel>> GetUserAccounts()
+        private ActionResult<List<UserAccountModel>> GetUserAccounts()
         {
             return Ok(_userAccountService.GetUserAccounts());
         }
 
         [HttpPost]
-        public ActionResult<UserAccountModel> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
+        private ActionResult<UserAccountModel> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
         {
             var newUserAccount = _userAccountService.CreateUserAccount(userAccountDto);
 
@@ -34,18 +34,47 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost("mockdata")]
-        public ActionResult<List<UserAccountModel>> CreateUserAccountsList()
+        private ActionResult<List<UserAccountModel>> CreateUserAccountsList()
         {
             return Ok(_userAccountService.GetUserAccountMockData());
         }
 
         [HttpDelete]
-        public ActionResult<UserAccountModel> DeleteUser(int employeeId) 
+        private ActionResult<UserAccountModel> DeleteUser(int employeeId) 
         {
             var wasUserAccountDeleted = _userAccountService.DeleteUserAccount(employeeId);
 
             if (!wasUserAccountDeleted)
                 return NotFound("No Employee was found with this ID.");
+
+            return NoContent();
+        }
+
+        [HttpPost("async")]
+        public async Task<ActionResult<UserAccountModel>> CreateUserAsync([FromBody] CreateUserAccountDto userAccountDto)
+        {
+            var newUserAccount = await _userAccountService.CreateUserAccountAsync(userAccountDto);
+
+            if (newUserAccount == null)
+                return NotFound("No Employee was found with this ID or Email is already in use.");
+
+            return Ok(newUserAccount);
+        }
+
+        [HttpGet("async")]
+        public async Task<ActionResult<IEnumerable<UserAccountModel>>> GetUserAccountsAsync()
+        {
+            var userAccounts = await _userAccountService.GetUserAccountsAsync();
+            return Ok(userAccounts);
+        }
+
+        [HttpDelete("async")]
+        public async Task<ActionResult> DeleteUserAsync(int employeeId)
+        {
+            var userAccountDeletedStatus = await _userAccountService.DeleteUserAccountAsync(employeeId);
+
+            if (userAccountDeletedStatus == 0)
+                return NotFound("No User Account was found with this ID.");
 
             return NoContent();
         }
