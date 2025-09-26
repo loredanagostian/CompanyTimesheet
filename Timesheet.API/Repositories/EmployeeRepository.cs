@@ -149,10 +149,10 @@ namespace Timesheet.API.Repositories
             return _mapper.Map<IEnumerable<EmployeeModel>>(employees);
         }
 
-        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto employeeDto)
         {
-            var employeeEntity = _mapper.Map<Employee>(createEmployeeDto);
-            _context.Employees.Add(employeeEntity);
+            var employeeEntity = _mapper.Map<Employee>(employeeDto);
+            await _context.Employees.AddAsync(employeeEntity);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EmployeeModel>(employeeEntity);
@@ -186,6 +186,22 @@ namespace Timesheet.API.Repositories
 
                 if (!employee.UserAccounts.Contains(userAccount))
                     employee.UserAccounts.Add(userAccount);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry)
+        {
+            var employee = await FindEmployeeByIdAsync(timeEntry.EmployeeId);
+
+            if (employee != null)
+            {
+                if (employee.TimeEntries == null)
+                    employee.TimeEntries = new List<TimeEntry>();
+
+                if (!employee.TimeEntries.Contains(timeEntry))
+                    employee.TimeEntries.Add(timeEntry);
 
                 await _context.SaveChangesAsync();
             }

@@ -6,8 +6,8 @@ namespace Timesheet.API.Entities
     public class TimeEntry
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Guid TimeEntryId { get; init; } // PK
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int TimeEntryId { get; init; } // PK
 
         [ForeignKey("EmployeeId")]
         public int EmployeeId { get; init; } // FK

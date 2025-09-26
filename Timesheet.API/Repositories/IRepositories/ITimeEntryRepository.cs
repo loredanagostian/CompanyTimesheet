@@ -1,4 +1,6 @@
-﻿using Timesheet.API.Models;
+﻿using Timesheet.API.Entities;
+using Timesheet.API.Models;
+using Timesheet.API.Models.DTOs;
 
 namespace Timesheet.API.Repositories.IRepositories
 {
@@ -7,5 +9,8 @@ namespace Timesheet.API.Repositories.IRepositories
         //TimeEntryModel? CreateTimeEntry(Models.DTOs.CreateTimeEntryDto timeEntryDto);
         //List<TimeEntryModel> GetTimeEntries();
         //List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber);
+        Task<IEnumerable<TimeEntryModel>> GetTimeEntriesAsync();
+        Task<(TimeEntryModel, TimeEntry)> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto);
+        Task<IEnumerable<TimeEntryModel>> GetTimeEntriesByEmployeeIdAsync(int id);
     }
 }

@@ -18,5 +18,6 @@ namespace Timesheet.API.Repositories.IRepositories
         Task RemoveEmployeeAsync(Employee employee);
         Task<Employee?> FindEmployeeByIdAsync(int id);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
+        Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry);
     }
 }
