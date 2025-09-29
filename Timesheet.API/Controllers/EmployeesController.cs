@@ -6,8 +6,9 @@ using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
 {
-    [Route("api/timesheet/[controller]")]
+    [Route("api/v{version:apiVersion}/timesheet/[controller]")]
     [ApiController]
+    [ApiVersion("2.0")]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -64,6 +65,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost]
+        [ApiVersion("3.0")]
         public async Task<ActionResult<EmployeeModel>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
         {
             var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
