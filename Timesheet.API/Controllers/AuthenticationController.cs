@@ -39,6 +39,7 @@ namespace Timesheet.API.Controllers
         /// <param name="authenticationRequestBody">The authentication request containing email and password.</param>
         /// <returns>A JWT token string if authentication is successful; otherwise, an error response.</returns>
         [HttpPost("authenticate")]
+        //[ApiVersion("0.1", Deprecated = true)]
         public async Task<ActionResult<string>> Authenticate([FromBody] AuthenticationRequestBody authenticationRequestBody)
         {
             if (authenticationRequestBody is null || string.IsNullOrWhiteSpace(authenticationRequestBody.Email) || string.IsNullOrWhiteSpace(authenticationRequestBody.Password))

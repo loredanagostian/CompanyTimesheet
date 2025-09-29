@@ -8,7 +8,7 @@ namespace Timesheet.API.Controllers
 {
     [Route("api/timesheet/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;

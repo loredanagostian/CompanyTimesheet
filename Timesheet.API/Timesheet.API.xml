@@ -95,5 +95,41 @@
         <member name="M:Timesheet.API.Migrations.EmployeesAddedKey.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Timesheet.API.Migrations.changedtimeentryid">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Timesheet.API.Migrations.changedtimeentryid2">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Timesheet.API.Migrations.newmigration">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.newmigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.newmigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.newmigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
