@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timesheet.API.DbContexts;
@@ -11,53 +12,63 @@ using Timesheet.API.DbContexts;
 namespace Timesheet.API.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    [Migration("20250925080740_TimesheetAddEntities3")]
-    partial class TimesheetAddEntities3
+    [Migration("20251002095225_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            modelBuilder.Entity("Timesheet.API.Entities.Employee", b =>
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Timesheet.API.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<string>("CNP")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ContractType")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
 
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Timesheet.API.Entities.TimeEntry", b =>
+            modelBuilder.Entity("Timesheet.API.Models.TimeEntry", b =>
                 {
-                    b.Property<Guid>("TimeEntryId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TimeEntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimeEntryId"));
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("HoursWorked")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("TimeEntryId");
 
@@ -66,44 +77,51 @@ namespace Timesheet.API.Migrations
                     b.ToTable("TimeEntries");
                 });
 
-            modelBuilder.Entity("Timesheet.API.Entities.UserAccount", b =>
+            modelBuilder.Entity("Timesheet.API.Models.UserAccount", b =>
                 {
+                    b.Property<int>("UserAccountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserAccountId"));
+
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Email");
+                    b.HasKey("UserAccountId");
 
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("UserAccounts");
                 });
 
-            modelBuilder.Entity("Timesheet.API.Entities.TimeEntry", b =>
+            modelBuilder.Entity("Timesheet.API.Models.TimeEntry", b =>
                 {
-                    b.HasOne("Timesheet.API.Entities.Employee", null)
+                    b.HasOne("Timesheet.API.Models.Employee", null)
                         .WithMany("TimeEntries")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Timesheet.API.Entities.UserAccount", b =>
+            modelBuilder.Entity("Timesheet.API.Models.UserAccount", b =>
                 {
-                    b.HasOne("Timesheet.API.Entities.Employee", null)
+                    b.HasOne("Timesheet.API.Models.Employee", null)
                         .WithMany("UserAccounts")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Timesheet.API.Entities.Employee", b =>
+            modelBuilder.Entity("Timesheet.API.Models.Employee", b =>
                 {
                     b.Navigation("TimeEntries");
 

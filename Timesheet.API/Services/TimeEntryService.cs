@@ -16,12 +16,12 @@ namespace Timesheet.API.Services
             _timeEntryRepository = timeEntryRepository ?? throw new ArgumentNullException(nameof(timeEntryRepository));
         }
 
-        public async Task<IEnumerable<TimeEntryModel>> GetTimeEntriesAsync()
+        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesAsync()
         {
             return await _timeEntryRepository.GetTimeEntriesAsync();
         }
 
-        public async Task<TimeEntryModel?> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
+        public async Task<TimeEntry?> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
         {
             var employeeFound = await _employeeRepository.GetEmployeeByIdAsync(timeEntryDto.EmployeeId);
 
@@ -35,7 +35,7 @@ namespace Timesheet.API.Services
             return newTimeEntry;
         }
 
-        public async Task<IEnumerable<TimeEntryModel>> GetTimeEntriesByEmployeeIdAsync(int id)
+        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByEmployeeIdAsync(int id)
         {
             return await _timeEntryRepository.GetTimeEntriesByEmployeeIdAsync(id);
         }

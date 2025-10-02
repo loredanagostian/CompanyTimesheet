@@ -6,7 +6,7 @@ using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
 {
-    [Route("api/v{version:apiVersion}/timesheet/[controller]")]
+    [Route("api/timesheet/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployeesAsync()
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeesAsync()
         {
             var employees = await _employeeService.GetEmployeesAsync();
             
@@ -29,8 +29,8 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost]
-        [ApiVersion("3.0")]
-        public async Task<ActionResult<EmployeeModel>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
+        //[ApiVersion("3.0")]
+        public async Task<ActionResult<Employee>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
         {
             var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
             
@@ -38,7 +38,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetEmployeeById")]
-        public async Task<ActionResult<EmployeeModel>> GetEmployeeById(int id)
+        public async Task<ActionResult<Employee>> GetEmployeeById(int id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
             if (employee is null) return NotFound();

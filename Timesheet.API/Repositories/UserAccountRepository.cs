@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
-using Timesheet.API.Entities;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
@@ -32,7 +31,7 @@ namespace Timesheet.API.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<(UserAccountModel?, UserAccount?)> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
+        public async Task<(UserAccount?, UserAccount?)> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
         {
             var userAccountEntity = _mapper.Map<UserAccount>(userAccountDto);
 
@@ -46,13 +45,13 @@ namespace Timesheet.API.Repositories
             _context.UserAccounts.Add(userAccountEntity);
             await _context.SaveChangesAsync();
 
-            return (_mapper.Map<UserAccountModel>(userAccountEntity), userAccountEntity);
+            return (_mapper.Map<UserAccount>(userAccountEntity), userAccountEntity);
         }
 
-        public async Task<IEnumerable<UserAccountModel>> GetUserAccountsAsync()
+        public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
         {
             var userAccounts = await _context.UserAccounts.ToListAsync();
-            return _mapper.Map<IEnumerable<UserAccountModel>>(userAccounts);
+            return _mapper.Map<IEnumerable<UserAccount>>(userAccounts);
         }
     }
 }

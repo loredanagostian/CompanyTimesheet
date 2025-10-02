@@ -11,124 +11,16 @@
             <param name="authenticationRequestBody">The authentication request containing email and password.</param>
             <returns>A JWT token string if authentication is successful; otherwise, an error response.</returns>
         </member>
-        <member name="T:Timesheet.API.Migrations.TimesheetDbInitialMigration">
+        <member name="T:Timesheet.API.Migrations.InitialCreate">
             <inheritdoc />
         </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetDbInitialMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:Timesheet.API.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetDbInitialMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+        <member name="M:Timesheet.API.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
             <inheritdoc />
         </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetDbInitialMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.TimesheetAddEntities">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.TimesheetAddEntities2">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.TimesheetAddEntities3">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities3.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities3.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.TimesheetAddEntities3.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.EmployeesDataSeed">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesDataSeed.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesDataSeed.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesDataSeed.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.UpdateEmployeeIdIdentity">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.UpdateEmployeeIdIdentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.UpdateEmployeeIdIdentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.UpdateEmployeeIdIdentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.EmployeesAddedKey">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesAddedKey.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesAddedKey.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.EmployeesAddedKey.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.changedtimeentryid">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.changedtimeentryid2">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.changedtimeentryid2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="T:Timesheet.API.Migrations.newmigration">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.newmigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.newmigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Timesheet.API.Migrations.newmigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Timesheet.API.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

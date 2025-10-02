@@ -19,13 +19,13 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimeEntryModel>>> GetTimeEntriesAsync()
+        public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesAsync()
         {
             return Ok(await _timeEntryService.GetTimeEntriesAsync());
         }
 
         [HttpPost]
-        public async Task<ActionResult<TimeEntryModel>> CreateTimeEntryAsync([FromBody] CreateTimeEntryDto timeEntryDto)
+        public async Task<ActionResult<TimeEntry>> CreateTimeEntryAsync([FromBody] CreateTimeEntryDto timeEntryDto)
         {
             var newTimeEntry = await _timeEntryService.CreateTimeEntryAsync(timeEntryDto);
 
@@ -36,7 +36,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet("employee/{id}")]
-        public async Task<ActionResult<IEnumerable<TimeEntryModel>>> GetTimeEntriesByEmployeeIdAsync(int id)
+        public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesByEmployeeIdAsync(int id)
         {
             var employeeFound = await _employeeService.GetEmployeeByIdAsync(id);
 

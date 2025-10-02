@@ -2,15 +2,15 @@
 {
     public enum ContractType { FullTime, PartTime, Contractor }
 
-    public class EmployeeModel
+    public class Employee
     {
-        public required int EmployeeId { get; init; } // PK
-        public required string CNP { get; init; } // FK
+        public int EmployeeId { get; set; }
+        public string CNP { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName  { get; set; } = string.Empty;
         public ContractType ContractType { get; set; }
-        public List<UserAccountModel> UserAccounts { get; set; } = new List<UserAccountModel>();
-        public List<TimeEntryModel> TimeEntries { get; set; } = new List<TimeEntryModel>();
+        public List<UserAccount> UserAccounts { get; set; } = new List<UserAccount>();
+        public List<TimeEntry> TimeEntries { get; set; } = new List<TimeEntry>();
 
         public int TotalHoursWorkedPerWeek
         {

@@ -1,19 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace Timesheet.API.Models.DTOs
 {
     public class CreateEmployeeDto
     {
-        [Required]
-        public required string CNP { get; set; }
+        public string CNP { get; set; } = string.Empty;
 
-        [Required]
-        public required string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
-        [Required]
-        public required string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
-        [Required]
-        public required ContractType ContractType { get; set; }
+        public ContractType ContractType { get; set; }
     }
 }

@@ -2,10 +2,10 @@
 {
     public class AuthUser
     {
-        public string Email { get; init; } = default!;
-        public int EmployeeId { get; init; }
-        public string? FirstName { get; init; }
-        public string? LastName { get; init; }
+        public string Email { get; set; } = string.Empty;
+        public int EmployeeId { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
 
         // Optional convenience
         public string FullName =>

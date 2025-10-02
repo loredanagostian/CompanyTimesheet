@@ -1,14 +1,13 @@
-﻿using Timesheet.API.Entities;
-using Timesheet.API.Models;
+﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 
 namespace Timesheet.API.Repositories.IRepositories
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<EmployeeModel>> GetEmployeesAsync();
-        Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
-        Task<EmployeeModel?> GetEmployeeByIdAsync(int employeeIdNumber);
+        Task<IEnumerable<Employee>> GetEmployeesAsync();
+        Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
+        Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
         Task RemoveEmployeeAsync(Employee employee);
         Task<Employee?> FindEmployeeByIdAsync(int id);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);

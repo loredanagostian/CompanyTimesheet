@@ -1,5 +1,4 @@
-﻿using Timesheet.API.Entities;
-using Timesheet.API.Models;
+﻿using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
@@ -17,17 +16,17 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
         {
             return await _employeeRepository.GetEmployeesAsync();
         }
 
-        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
+        public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
             return await _employeeRepository.CreateEmployeeAsync(createEmployeeDto);
         }
 
-        public Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
+        public Task<Employee?> GetEmployeeByIdAsync(int id)
             => _employeeRepository.GetEmployeeByIdAsync(id);
 
         public async Task RemoveEmployeeAsync(int id)

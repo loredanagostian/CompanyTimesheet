@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
-using Timesheet.API.Entities;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
@@ -19,11 +18,10 @@ namespace Timesheet.API.Repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
         {
             var employees = await _context.Employees
-                .Include(e => e.UserAccounts)
-                .Include(e => e.TimeEntries)
+                .AsNoTracking()
                 .ToListAsync();
 
             // Without AutoMapper
@@ -37,22 +35,22 @@ namespace Timesheet.API.Repositories
             //    CNP = e.CNP
             //}).ToList();
 
-            return _mapper.Map<IEnumerable<EmployeeModel>>(employees);
+            return employees;
         }
 
-        public async Task<EmployeeModel> CreateEmployeeAsync(CreateEmployeeDto employeeDto)
+        public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto employeeDto)
         {
             var employeeEntity = _mapper.Map<Employee>(employeeDto);
             await _context.Employees.AddAsync(employeeEntity);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<EmployeeModel>(employeeEntity);
+            return _mapper.Map<Employee>(employeeEntity);
         }
 
-        public async Task<EmployeeModel?> GetEmployeeByIdAsync(int id)
+        public async Task<Employee?> GetEmployeeByIdAsync(int id)
         {
             var entity = await FindEmployeeByIdAsync(id);
-            return entity is null ? null : _mapper.Map<EmployeeModel>(entity);
+            return entity is null ? null : _mapper.Map<Employee>(entity);
         }
 
         public async Task<Employee?> FindEmployeeByIdAsync(int id)

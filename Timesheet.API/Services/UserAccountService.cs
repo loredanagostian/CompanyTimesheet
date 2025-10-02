@@ -16,7 +16,7 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public async Task<UserAccountModel?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
+        public async Task<UserAccount?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
         {
             //return await _userAccountRepository.CreateUserAccountAsync(userAccountDto);
 
@@ -43,7 +43,7 @@ namespace Timesheet.API.Services
             return newUserAccountModel;
         }
 
-        public async Task<IEnumerable<UserAccountModel>> GetUserAccountsAsync()
+        public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
         {
             return await _userAccountRepository.GetUserAccountsAsync();
         }

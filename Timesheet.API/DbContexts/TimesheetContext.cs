@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Timesheet.API.Entities;
 using Timesheet.API.Models;
 
 namespace Timesheet.API.DbContexts
@@ -16,41 +15,41 @@ namespace Timesheet.API.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Employee>()
-                .HasData(
-                    new EmployeeModel
-                    {
-                        EmployeeId = 1,
-                        FirstName = "Ana",
-                        LastName = "Blandiana",
-                        ContractType = ContractType.FullTime,
-                        CNP = "1234567890123"
-                    },
-                    new EmployeeModel
-                    {
-                        EmployeeId = 2,
-                        FirstName = "Ion",
-                        LastName = "Gladiatorul",
-                        ContractType = ContractType.PartTime,
-                        CNP = "9876543210987"
-                    },
-                    new EmployeeModel
-                    {
-                        EmployeeId = 3,
-                        FirstName = "Maria",
-                        LastName = "Ioana",
-                        ContractType = ContractType.FullTime,
-                        CNP = "4567891234567"
-                    },
-                    new EmployeeModel
-                    {
-                        EmployeeId = 4,
-                        FirstName = "Catalin",
-                        LastName = "Botezatul",
-                        ContractType = ContractType.Contractor,
-                        CNP = "7891234567891"
-                    }
-                );
+            //modelBuilder.Entity<Employee>()
+            //    .HasData(
+            //        new EmployeeModel
+            //        {
+            //            EmployeeId = 1,
+            //            FirstName = "Ana",
+            //            LastName = "Blandiana",
+            //            ContractType = ContractType.FullTime,
+            //            CNP = "1234567890123"
+            //        },
+            //        new EmployeeModel
+            //        {
+            //            EmployeeId = 2,
+            //            FirstName = "Ion",
+            //            LastName = "Gladiatorul",
+            //            ContractType = ContractType.PartTime,
+            //            CNP = "9876543210987"
+            //        },
+            //        new EmployeeModel
+            //        {
+            //            EmployeeId = 3,
+            //            FirstName = "Maria",
+            //            LastName = "Ioana",
+            //            ContractType = ContractType.FullTime,
+            //            CNP = "4567891234567"
+            //        },
+            //        new EmployeeModel
+            //        {
+            //            EmployeeId = 4,
+            //            FirstName = "Catalin",
+            //            LastName = "Botezatul",
+            //            ContractType = ContractType.Contractor,
+            //            CNP = "7891234567891"
+            //        }
+            //    );
 
             base.OnModelCreating(modelBuilder);
         }

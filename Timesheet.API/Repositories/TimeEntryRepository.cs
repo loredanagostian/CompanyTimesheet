@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
-using Timesheet.API.Entities;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
@@ -19,29 +18,29 @@ namespace Timesheet.API.Repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<TimeEntryModel>> GetTimeEntriesAsync()
+        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesAsync()
         {
             var timeEntries = await _context.TimeEntries.ToListAsync();
 
-            return _mapper.Map<IEnumerable<TimeEntryModel>>(timeEntries);
+            return _mapper.Map<IEnumerable<TimeEntry>>(timeEntries);
         }
 
-        public async Task<(TimeEntryModel, TimeEntry)> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
+        public async Task<(TimeEntry, TimeEntry)> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
         {
             var timeEntryEntity = _mapper.Map<TimeEntry>(timeEntryDto);
             await _context.TimeEntries.AddAsync(timeEntryEntity);
             await _context.SaveChangesAsync();
 
-            return (_mapper.Map<TimeEntryModel>(timeEntryEntity), timeEntryEntity);
+            return (_mapper.Map<TimeEntry>(timeEntryEntity), timeEntryEntity);
         }
 
-        public async Task<IEnumerable<TimeEntryModel>> GetTimeEntriesByEmployeeIdAsync(int id)
+        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByEmployeeIdAsync(int id)
         {
             var timeEntries = await _context.TimeEntries
                 .Where(t => t.EmployeeId == id)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<TimeEntryModel>>(timeEntries);
+            return _mapper.Map<IEnumerable<TimeEntry>>(timeEntries);
         }
     }
 }

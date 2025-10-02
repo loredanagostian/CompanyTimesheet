@@ -18,7 +18,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserAccountModel>> CreateUserAsync([FromBody] CreateUserAccountDto userAccountDto)
+        public async Task<ActionResult<UserAccount>> CreateUserAsync([FromBody] CreateUserAccountDto userAccountDto)
         {
             var newUserAccount = await _userAccountService.CreateUserAccountAsync(userAccountDto);
 
@@ -29,7 +29,7 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAccountModel>>> GetUserAccountsAsync()
+        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccountsAsync()
         {
             var userAccounts = await _userAccountService.GetUserAccountsAsync();
             return Ok(userAccounts);

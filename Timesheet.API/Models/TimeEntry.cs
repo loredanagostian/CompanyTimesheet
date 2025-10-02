@@ -1,14 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Timesheet.API.Models.DTOs
+﻿namespace Timesheet.API.Models
 {
-    public class CreateTimeEntryDto
+    public class TimeEntry
     {
+        public int TimeEntryId { get; set; }
         public int EmployeeId { get; set; }
-
         public DateTime Date { get; set; }
-
-        [Range(0, 24)]
         public int HoursWorked { get; set; }
     }
 }
