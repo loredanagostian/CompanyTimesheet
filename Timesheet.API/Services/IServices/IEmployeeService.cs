@@ -8,7 +8,7 @@ namespace Timesheet.API.Services.Interfaces
         Task<IEnumerable<Employee>> GetEmployeesAsync();
         Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
         Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
-        Task RemoveEmployeeAsync(int employeeIdNumber);
+        Task DeleteEmployee(Employee employee);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
         Task<Employee?> FindEmployeeByCNP(string cnp);
     }

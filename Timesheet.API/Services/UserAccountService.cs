@@ -16,24 +16,9 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public async Task<UserAccount?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
+        public async Task<UserAccount?> CreateUserAccount(CreateUserAccountDto userAccountDto, Employee employee)
         {
-            //return await _userAccountRepository.CreateUserAccountAsync(userAccountDto);
-
-            var employeeModelFound = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
-
-            if (employeeModelFound == null)
-            {
-                return null;
-            }
-
-            if (string.IsNullOrEmpty(userAccountDto.Email) || string.IsNullOrEmpty(userAccountDto.Password))
-            {
-                userAccountDto.Email = $"{employeeModelFound.FirstName.ToLower()}.{employeeModelFound.LastName.ToLower()}@company.com";
-                userAccountDto.Password = "DefaultPassword123";
-            }
-
-            var newUserAccountModel = await _userAccountRepository.CreateUserAccountAsync(userAccountDto);
+            var newUserAccountModel = await _userAccountRepository.CreateUserAccount(userAccountDto, employee);
 
             if (newUserAccountModel == null)
                 return null;
@@ -51,6 +36,16 @@ namespace Timesheet.API.Services
         public async Task<int> DeleteUserAccountAsync(int id)
         {
             return await _userAccountRepository.DeleteUserAccountsByEmployeeIdAsync(id);
+        }
+
+        public async Task DeleteUserAccount(UserAccount userAccount)
+        {
+            await _userAccountRepository.DeleteUserAccount(userAccount);
+        }
+
+        public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
+        {
+            return await _userAccountRepository.GetUserAccountsByEmployeeId(employeeId);
         }
     }
 }

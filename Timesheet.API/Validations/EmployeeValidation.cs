@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Timesheet.API.Models.DTOs;
 
-namespace Timesheet.API.Models.Validations
+namespace Timesheet.API.Validations
 {
     public static class EmployeeValidation
     {

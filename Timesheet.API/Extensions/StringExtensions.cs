@@ -11,5 +11,16 @@
 
             return char.ToUpper(input[0]) + input.Substring(1).ToLower();
         }
+
+        public static string? TrimToNull(this string? s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return null;
+            return s.Trim();
+        }
+
+        public static string? ToLowerInvariantSafe(this string? s)
+        {
+            return s is null ? null : s.ToLowerInvariant();
+        }
     }
 }

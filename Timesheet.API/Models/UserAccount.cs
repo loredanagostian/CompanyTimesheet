@@ -6,5 +6,7 @@
         public int EmployeeId { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public bool HasDefaultPassword { get; set; } = true;
+        public bool IsAlias { get; set; } = false;
     }
 }

@@ -58,7 +58,7 @@ namespace Timesheet.API.Repositories
             return await _context.Employees.FindAsync(id);
         }
 
-        public async Task RemoveEmployeeAsync(Employee employee)
+        public async Task DeleteEmployee(Employee employee)
         {
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();

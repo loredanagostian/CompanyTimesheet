@@ -8,7 +8,7 @@ namespace Timesheet.API.Repositories.IRepositories
         Task<IEnumerable<Employee>> GetEmployeesAsync();
         Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
         Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
-        Task RemoveEmployeeAsync(Employee employee);
+        Task DeleteEmployee(Employee employee);
         Task<Employee?> FindEmployeeByIdAsync(int id);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
         Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry);

@@ -31,7 +31,7 @@ namespace Timesheet.API.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<UserAccount?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
+        public async Task<UserAccount?> CreateUserAccount(CreateUserAccountDto userAccountDto, Employee employee)
         {
             //var userAccountEntity = _mapper.Map<UserAccount>(userAccountDto);
 
@@ -44,12 +44,13 @@ namespace Timesheet.API.Repositories
 
             var newUserAccount = new UserAccount
             {
-                Email = userAccountDto.Email ?? "",
-                Password = userAccountDto.Password ?? "",
-                EmployeeId = userAccountDto.EmployeeId
+                Email = userAccountDto.Email ?? $"{employee.FirstName}.{employee.LastName}@company.com",
+                Password = userAccountDto.Password ?? "Default1234",
+                EmployeeId = userAccountDto.EmployeeId,
+                IsAlias = userAccountDto.Email != null && userAccountDto.Password != null
             };
 
-            _context.UserAccounts.Add(newUserAccount);
+            await _context.UserAccounts.AddAsync(newUserAccount);
             await _context.SaveChangesAsync();
 
             return newUserAccount;
@@ -60,6 +61,19 @@ namespace Timesheet.API.Repositories
             var userAccounts = await _context.UserAccounts.ToListAsync();
             //return _mapper.Map<IEnumerable<UserAccount>>(userAccounts);
             return userAccounts;
+        }
+
+        public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
+        {
+            return await _context.UserAccounts
+                .Where(ua => ua.EmployeeId == employeeId)
+                .ToListAsync();
+        }
+
+        public async Task DeleteUserAccount(UserAccount userAccount)
+        {
+            _context.UserAccounts.Remove(userAccount);
+            await _context.SaveChangesAsync();
         }
     }
 }

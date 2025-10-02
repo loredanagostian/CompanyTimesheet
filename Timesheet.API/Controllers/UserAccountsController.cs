@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Services.Interfaces;
+using Timesheet.API.Validations;
 
 namespace Timesheet.API.Controllers
 {
@@ -11,32 +12,58 @@ namespace Timesheet.API.Controllers
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
+        private readonly IEmployeeService _employeeService;
 
-        public UserAccountsController(IUserAccountService userAccountService)
+        public UserAccountsController(IUserAccountService userAccountService, IEmployeeService employeeService)
         {
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
+            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserAccount>> CreateUserAsync([FromBody] CreateUserAccountDto userAccountDto)
+        public async Task<ActionResult<UserAccount>> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
         {
-            var newUserAccount = await _userAccountService.CreateUserAccountAsync(userAccountDto);
+            var employee = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
+
+            if (employee == null)
+                return NotFound($"No Employee was found with ID {userAccountDto.EmployeeId}.");
+
+            var errors = UserAccountValidation.Validate(userAccountDto);
+            if (errors.Count > 0)
+            {
+                return ValidationProblem(new ValidationProblemDetails(errors)
+                {
+                    Title = "One or more validation errors occurred.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            var newUserAccount = await _userAccountService.CreateUserAccount(userAccountDto, employee);
 
             if (newUserAccount == null)
-                return NotFound("No Employee was found with this ID or Email is already in use.");
+                return Conflict($"Email {userAccountDto.Email} is already in use.");
 
-            return Ok(newUserAccount);
+            return CreatedAtAction(nameof(GetUserAccountById), new { id = newUserAccount.UserAccountId }, newUserAccount);
+        }
+
+        [HttpGet("{id}", Name = "GetUserAccountById")]
+        public async Task<ActionResult<UserAccount>> GetUserAccountById(int id)
+        {
+            var userAccount = await _userAccountService.GetUserAccountsAsync();
+            if (userAccount == null)
+                return NotFound("No User Account was found with this ID.");
+            return Ok(userAccount);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccountsAsync()
+        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccounts()
         {
             var userAccounts = await _userAccountService.GetUserAccountsAsync();
             return Ok(userAccounts);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteUserAsync(int employeeId)
+        public async Task<ActionResult> DeleteUser(int employeeId)
         {
             var userAccountDeletedStatus = await _userAccountService.DeleteUserAccountAsync(employeeId);
 

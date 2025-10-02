@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
-using Timesheet.API.Models.Validations;
 using Timesheet.API.Services.Interfaces;
+using Timesheet.API.Validations;
 
 namespace Timesheet.API.Controllers
 {
@@ -67,7 +67,24 @@ namespace Timesheet.API.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveEmployeeAsync(int employeeIdNumber)
         {
-            await _employeeService.RemoveEmployeeAsync(employeeIdNumber);
+            var employee = await _employeeService.GetEmployeeByIdAsync(employeeIdNumber);
+
+            if (employee is null)
+            {
+                return NotFound($"No Employee was found with ID {employeeIdNumber}.");
+            }
+
+            var userAccounts = await _userAccountService.GetUserAccountsByEmployeeId(employee.EmployeeId);
+
+            if (userAccounts.Any())
+            {
+                foreach (var account in userAccounts)
+                {
+                    await _userAccountService.DeleteUserAccount(account);
+                }
+            }
+
+            await _employeeService.DeleteEmployee(employee);
 
             return NoContent();
         }
