@@ -17,53 +17,6 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        //public EmployeeModel CreateEmployee(CreateEmployeeDto createEmployeeDto)
-        //{
-        //    var newEmployee = _employeeRepository.CreateEmployee(createEmployeeDto);
-
-        //    return newEmployee;
-        //}
-
-        //public bool RemoveEmployee(int employeeIdNumber)
-        //{
-        //    var employeeFound = _employeeRepository.FindByEmployeeIdNumber(employeeIdNumber);
-
-        //    if (employeeFound == null)
-        //        return false;
-
-        //    if (employeeFound.UserAccounts.Any())
-        //    {
-        //        foreach (var userAccount in employeeFound.UserAccounts)
-        //        {
-        //            _userAccountRepository.DeleteUserAccount(userAccount);
-        //        }
-        //    }
-
-        //    _employeeRepository.RemoveEmployee(employeeFound);
-
-        //    return true;
-        //}
-
-        //public List<EmployeeModel> GetEmployees()
-        //{
-        //    return _employeeRepository.GetEmployees();
-        //}
-
-        //public EmployeeModel? FindByEmployeeIdNumber(int employeeIdNumber)
-        //{
-        //    return _employeeRepository.FindByEmployeeIdNumber(employeeIdNumber);
-        //}
-
-        //public void UpdateEmployeeUserAccounts(UserAccountModel userAccount)
-        //{
-        //    _employeeRepository.UpdateEmployeeUserAccounts(userAccount);
-        //}
-
-        //public List<EmployeeModel> GetEmployeesMockData()
-        //{
-        //    return _employeeRepository.GetEmployeesMockData();
-        //}
-
         public async Task<IEnumerable<EmployeeModel>> GetEmployeesAsync()
         {
             return await _employeeRepository.GetEmployeesAsync();

@@ -1,21 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Timesheet.API.DbContexts;
-using Timesheet.API.Entities;
 using Timesheet.API.Models;
 
 namespace Timesheet.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    /// <summary>
-    /// Controller for handling user authentication and JWT token generation.
-    /// </summary>
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -39,7 +34,6 @@ namespace Timesheet.API.Controllers
         /// <param name="authenticationRequestBody">The authentication request containing email and password.</param>
         /// <returns>A JWT token string if authentication is successful; otherwise, an error response.</returns>
         [HttpPost("authenticate")]
-        //[ApiVersion("0.1", Deprecated = true)]
         public async Task<ActionResult<string>> Authenticate([FromBody] AuthenticationRequestBody authenticationRequestBody)
         {
             if (authenticationRequestBody is null || string.IsNullOrWhiteSpace(authenticationRequestBody.Email) || string.IsNullOrWhiteSpace(authenticationRequestBody.Password))

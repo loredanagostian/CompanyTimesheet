@@ -19,33 +19,6 @@ namespace Timesheet.API.Repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        //private static List<TimeEntryModel> _timeEntries = new List<TimeEntryModel>();
-
-        //private TimeEntryModel? CreateTimeEntry(CreateTimeEntryDto timeEntryDto)
-        //{
-        //    var newTimeEntry = new TimeEntryModel
-        //    {
-        //        TimeEntryId = Guid.NewGuid(),
-        //        Date = timeEntryDto.Date,
-        //        HoursWorked = timeEntryDto.HoursWorked,
-        //        EmployeeId = timeEntryDto.EmployeeId,
-        //    };
-
-        //    _timeEntries.Add(newTimeEntry);
-
-        //    return newTimeEntry;
-        //}
-
-        //private List<TimeEntryModel> GetTimeEntries()
-        //{
-        //    return _timeEntries;
-        //}
-
-        //private List<TimeEntryModel> GetTimeEntriesByEmployeeIdNumber(int employeeIdNumber)
-        //{
-        //    return _timeEntries.FindAll(t => t.EmployeeId == employeeIdNumber);
-        //}
-
         public async Task<IEnumerable<TimeEntryModel>> GetTimeEntriesAsync()
         {
             var timeEntries = await _context.TimeEntries.ToListAsync();
