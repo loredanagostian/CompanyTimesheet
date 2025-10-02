@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+﻿//using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
+using Timesheet.API.Extensions;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
@@ -10,12 +11,12 @@ namespace Timesheet.API.Repositories
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly TimesheetContext _context;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public EmployeeRepository(TimesheetContext context, IMapper mapper)
+        public EmployeeRepository(TimesheetContext context /*, IMapper mapper*/)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            //_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesAsync()
@@ -24,33 +25,32 @@ namespace Timesheet.API.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Without AutoMapper
-            //
-            //return employees.Select(e => new EmployeeModel
-            //{
-            //    EmployeeId = e.EmployeeId,
-            //    FirstName = e.FirstName,
-            //    LastName = e.LastName,
-            //    ContractType = e.ContractType,
-            //    CNP = e.CNP
-            //}).ToList();
-
             return employees;
         }
 
         public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto employeeDto)
         {
-            var employeeEntity = _mapper.Map<Employee>(employeeDto);
-            await _context.Employees.AddAsync(employeeEntity);
+            var contractTypeParsed = Enum.Parse<ContractType>(employeeDto.ContractType!.Trim(), ignoreCase: true);
+
+            //var employeeEntity = _mapper.Map<Employee>(employeeDto);
+            var newEmployee = new Employee
+            {
+                FirstName = employeeDto.FirstName.CapitalizeFirstLetter(),
+                LastName = employeeDto.LastName.CapitalizeFirstLetter(),
+                CNP = employeeDto.CNP,
+                ContractType = contractTypeParsed,
+            };
+
+            await _context.Employees.AddAsync(newEmployee);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<Employee>(employeeEntity);
+            return newEmployee;
         }
 
         public async Task<Employee?> GetEmployeeByIdAsync(int id)
         {
             var entity = await FindEmployeeByIdAsync(id);
-            return entity is null ? null : _mapper.Map<Employee>(entity);
+            return entity is null ? null : entity;
         }
 
         public async Task<Employee?> FindEmployeeByIdAsync(int id)
@@ -94,6 +94,15 @@ namespace Timesheet.API.Repositories
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<Employee?> FindEmployeeByCNP(string cnp)
+        {
+            var employee = await _context.Employees
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.CNP == cnp);
+
+            return employee;
         }
     }
 }

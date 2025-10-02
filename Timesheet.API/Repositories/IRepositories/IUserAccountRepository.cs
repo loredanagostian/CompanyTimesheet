@@ -6,7 +6,7 @@ namespace Timesheet.API.Repositories.IRepositories
     public interface IUserAccountRepository
     {
         Task<int> DeleteUserAccountsByEmployeeIdAsync(int id);
-        Task<(UserAccount?, UserAccount?)> CreateUserAccountAsync(CreateUserAccountDto userAccountDto);
+        Task<UserAccount?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto);
         Task<IEnumerable<UserAccount>> GetUserAccountsAsync();
     }
 }

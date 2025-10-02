@@ -28,9 +28,9 @@ namespace Timesheet.API.Services
             if (employeeFound == null)
                 return null;
 
-            var (newTimeEntry, newTimeEntryEntity) = await _timeEntryRepository.CreateTimeEntryAsync(timeEntryDto);
+            var newTimeEntry = await _timeEntryRepository.CreateTimeEntryAsync(timeEntryDto);
 
-            await _employeeRepository.UpdateEmployeeTimeEntriesAsync(newTimeEntryEntity);
+            await _employeeRepository.UpdateEmployeeTimeEntriesAsync(newTimeEntry);
 
             return newTimeEntry;
         }

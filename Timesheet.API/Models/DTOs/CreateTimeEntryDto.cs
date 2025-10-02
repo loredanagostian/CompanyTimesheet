@@ -8,7 +8,6 @@ namespace Timesheet.API.Models.DTOs
 
         public DateTime Date { get; set; }
 
-        [Range(0, 24)]
         public int HoursWorked { get; set; }
     }
 }

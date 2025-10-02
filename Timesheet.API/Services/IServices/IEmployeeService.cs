@@ -10,5 +10,6 @@ namespace Timesheet.API.Services.Interfaces
         Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
         Task RemoveEmployeeAsync(int employeeIdNumber);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
+        Task<Employee?> FindEmployeeByCNP(string cnp);
     }
 }

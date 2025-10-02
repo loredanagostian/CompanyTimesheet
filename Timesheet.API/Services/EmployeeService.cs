@@ -44,5 +44,10 @@ namespace Timesheet.API.Services
         {
             await _employeeRepository.UpdateEmployeeUserAccountsAsync(userAccount);
         }
+
+        public async Task<Employee?> FindEmployeeByCNP(string cnp)
+        {
+            return await _employeeRepository.FindEmployeeByCNP(cnp);
+        }
     }
 }

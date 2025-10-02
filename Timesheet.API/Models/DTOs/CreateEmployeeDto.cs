@@ -9,6 +9,6 @@ namespace Timesheet.API.Models.DTOs
 
         public string LastName { get; set; } = string.Empty;
 
-        public ContractType ContractType { get; set; }
+        public string ContractType { get; set; } = string.Empty;
     }
 }

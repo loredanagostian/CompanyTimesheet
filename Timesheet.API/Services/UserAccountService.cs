@@ -33,12 +33,12 @@ namespace Timesheet.API.Services
                 userAccountDto.Password = "DefaultPassword123";
             }
 
-            var (newUserAccountModel, newUserAccountEntity) = await _userAccountRepository.CreateUserAccountAsync(userAccountDto);
+            var newUserAccountModel = await _userAccountRepository.CreateUserAccountAsync(userAccountDto);
 
-            if (newUserAccountModel == null || newUserAccountEntity == null)
+            if (newUserAccountModel == null)
                 return null;
 
-            await _employeeService.UpdateEmployeeUserAccountsAsync(newUserAccountEntity);
+            await _employeeService.UpdateEmployeeUserAccountsAsync(newUserAccountModel);
 
             return newUserAccountModel;
         }

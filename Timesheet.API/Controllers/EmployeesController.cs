@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Models.Validations;
 using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
@@ -32,6 +33,23 @@ namespace Timesheet.API.Controllers
         //[ApiVersion("3.0")]
         public async Task<ActionResult<Employee>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
         {
+            var errors = EmployeeValidation.Validate(employeeDto);
+            if (errors.Count > 0)
+            {
+                return ValidationProblem(new ValidationProblemDetails(errors)
+                {
+                    Title = "One or more validation errors occurred.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+
+            var employeeExists = await _employeeService.FindEmployeeByCNP(employeeDto.CNP);
+
+            if (employeeExists is not null)
+            {
+                return Conflict($"An employee with CNP {employeeDto.CNP} already exists.");
+            }
+
             var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
             
             return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);

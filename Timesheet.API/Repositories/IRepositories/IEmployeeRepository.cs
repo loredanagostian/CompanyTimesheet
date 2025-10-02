@@ -12,5 +12,6 @@ namespace Timesheet.API.Repositories.IRepositories
         Task<Employee?> FindEmployeeByIdAsync(int id);
         Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
         Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry);
+        Task<Employee?> FindEmployeeByCNP(string cnp);
     }
 }

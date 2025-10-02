@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿//using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
 using Timesheet.API.Models;
@@ -10,12 +10,12 @@ namespace Timesheet.API.Repositories
     public class UserAccountRepository : IUserAccountRepository
     {
         private readonly TimesheetContext _context;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
-        public UserAccountRepository(TimesheetContext context, IMapper mapper)
+        public UserAccountRepository(TimesheetContext context /*, IMapper mapper*/)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            //_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<int> DeleteUserAccountsByEmployeeIdAsync(int id)
@@ -31,27 +31,35 @@ namespace Timesheet.API.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<(UserAccount?, UserAccount?)> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
+        public async Task<UserAccount?> CreateUserAccountAsync(CreateUserAccountDto userAccountDto)
         {
-            var userAccountEntity = _mapper.Map<UserAccount>(userAccountDto);
+            //var userAccountEntity = _mapper.Map<UserAccount>(userAccountDto);
 
             var userAccountFound = await _context.UserAccounts.FindAsync(userAccountDto.Email);
 
             if (userAccountFound != null)
             {
-                return (null, null);
+                return null;
             }
 
-            _context.UserAccounts.Add(userAccountEntity);
+            var newUserAccount = new UserAccount
+            {
+                Email = userAccountDto.Email ?? "",
+                Password = userAccountDto.Password ?? "",
+                EmployeeId = userAccountDto.EmployeeId
+            };
+
+            _context.UserAccounts.Add(newUserAccount);
             await _context.SaveChangesAsync();
 
-            return (_mapper.Map<UserAccount>(userAccountEntity), userAccountEntity);
+            return newUserAccount;
         }
 
         public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
         {
             var userAccounts = await _context.UserAccounts.ToListAsync();
-            return _mapper.Map<IEnumerable<UserAccount>>(userAccounts);
+            //return _mapper.Map<IEnumerable<UserAccount>>(userAccounts);
+            return userAccounts;
         }
     }
 }
