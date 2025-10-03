@@ -116,10 +116,5 @@ namespace Timesheet.API.Services
 
             return ServiceResult<UserAccount>.Success(userAccount);
         }
-
-        //public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
-        //{
-        //    return await _userAccountRepository.GetUserAccountsByEmployeeId(employeeId);
-        //}
     }
 }
