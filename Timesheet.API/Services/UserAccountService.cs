@@ -1,9 +1,9 @@
-﻿using System.Net;
+﻿using System.Text.RegularExpressions;
+using Timesheet.API.Extensions;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
-using Timesheet.API.Validations;
 
 namespace Timesheet.API.Services
 {
@@ -26,6 +26,31 @@ namespace Timesheet.API.Services
             return $"{firstNamePart}.{lastNamePart}@company.com";
         }
 
+        private Dictionary<string, string[]> Validate(CreateUserAccountDto dto)
+        {
+            Regex EmailRegex =
+                new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            var errors = new Dictionary<string, string[]>();
+
+            var email = dto.Email.TrimToNull();
+            var password = dto.Password?.Trim(); // allow spaces inside passwords but trim ends
+
+            // Email: optional, but if present must match regex
+            if (email is not null && !EmailRegex.IsMatch(email))
+            {
+                errors["email"] = ["Email is not a valid email address."];
+            }
+
+            // Password: optional, but if present must be >= 8 chars
+            if (password is not null && password.Length < 8)
+            {
+                errors["password"] = ["Password must be at least 8 characters long."];
+            }
+
+            return errors;
+        }
+
         public async Task<ServiceResult<UserAccount>> CreateUserAccount(CreateUserAccountDto userAccountDto)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
@@ -35,17 +60,10 @@ namespace Timesheet.API.Services
                     $"No Employee was found with ID {userAccountDto.EmployeeId}."
                 );
 
-            var errors = UserAccountValidation.Validate(userAccountDto);
+            var errors = Validate(userAccountDto);
 
             if (errors.Count > 0)
                 return ServiceResult<UserAccount>.ValidationFailure(errors);
-
-            var userAccount = await _userAccountRepository.GetUserAccountsByEmployeeId(userAccountDto.EmployeeId);
-
-            if (userAccount.Any(ua => ua.Email.Equals(userAccountDto.Email)))
-                return ServiceResult<UserAccount>.Failure(
-                    $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {userAccountDto.Email}."
-                );
 
             var newUserAccount = new UserAccount
             {
@@ -55,6 +73,13 @@ namespace Timesheet.API.Services
                 HasDefaultPassword = userAccountDto.Password == null,
                 IsAlias = userAccountDto.Email != null
             };
+
+            var userAccount = await _userAccountRepository.GetUserAccountsByEmployeeId(userAccountDto.EmployeeId);
+
+            if (userAccount.Any(ua => ua.Email.Equals(newUserAccount.Email)))
+                return ServiceResult<UserAccount>.Failure(
+                    $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {newUserAccount.Email}."
+                );
 
             await _userAccountRepository.CreateUserAccount(newUserAccount);
 

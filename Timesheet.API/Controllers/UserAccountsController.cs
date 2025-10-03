@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Services.Interfaces;
-using Timesheet.API.Validations;
 
 namespace Timesheet.API.Controllers
 {

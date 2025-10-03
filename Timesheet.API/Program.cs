@@ -28,8 +28,7 @@ builder.Services.AddDbContext<TimesheetContext>(
     //    builder.Configuration["ConnectionStrings:TimesheetDbConnectionString"]));
     dbContextOptions => dbContextOptions.UseSqlServer(
         builder.Configuration["ConnectionStrings:TimesheetDbConnectionString"])
-    .EnableSensitiveDataLogging()
-    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+    .EnableSensitiveDataLogging());
 
 builder.Services
     .AddControllers()

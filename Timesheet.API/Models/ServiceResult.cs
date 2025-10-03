@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Timesheet.API.Models
+﻿namespace Timesheet.API.Models
 {
     public class ServiceResult<T>
     {

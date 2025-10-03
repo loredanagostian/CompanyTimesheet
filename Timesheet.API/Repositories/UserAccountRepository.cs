@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
 using Timesheet.API.Models;
-using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 
 namespace Timesheet.API.Repositories

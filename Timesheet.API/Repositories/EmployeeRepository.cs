@@ -22,6 +22,7 @@ namespace Timesheet.API.Repositories
         public async Task<IEnumerable<Employee>> GetEmployeesAsync()
         {
             var employees = await _context.Employees
+                .Include(e => e.UserAccounts)
                 .AsNoTracking()
                 .ToListAsync();
 
