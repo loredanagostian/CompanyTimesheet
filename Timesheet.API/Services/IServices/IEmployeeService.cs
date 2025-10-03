@@ -9,7 +9,7 @@ namespace Timesheet.API.Services.Interfaces
         Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto);
         Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
         Task DeleteEmployee(Employee employee);
-        Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount);
+        Task AddEmployeeUserAccount(Employee employee, UserAccount userAccount);
         Task<Employee?> FindEmployeeByCNP(string cnp);
     }
 }

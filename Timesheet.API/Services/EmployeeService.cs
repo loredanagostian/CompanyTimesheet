@@ -23,7 +23,7 @@ namespace Timesheet.API.Services
 
         public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
-            return await _employeeRepository.CreateEmployeeAsync(createEmployeeDto);
+            return await _employeeRepository.CreateEmployee(createEmployeeDto);
         }
 
         public Task<Employee?> GetEmployeeByIdAsync(int id)
@@ -34,9 +34,9 @@ namespace Timesheet.API.Services
             await _employeeRepository.DeleteEmployee(employee);
         }
 
-        public async Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount)
+        public async Task AddEmployeeUserAccount(Employee employee, UserAccount userAccount)
         {
-            await _employeeRepository.UpdateEmployeeUserAccountsAsync(userAccount);
+            await _employeeRepository.AddEmployeeUserAccount(employee, userAccount);
         }
 
         public async Task<Employee?> FindEmployeeByCNP(string cnp)

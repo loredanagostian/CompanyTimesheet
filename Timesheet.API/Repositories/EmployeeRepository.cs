@@ -28,7 +28,7 @@ namespace Timesheet.API.Repositories
             return employees;
         }
 
-        public async Task<Employee> CreateEmployeeAsync(CreateEmployeeDto employeeDto)
+        public async Task<Employee> CreateEmployee(CreateEmployeeDto employeeDto)
         {
             var contractTypeParsed = Enum.Parse<ContractType>(employeeDto.ContractType!.Trim(), ignoreCase: true);
 
@@ -64,20 +64,10 @@ namespace Timesheet.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEmployeeUserAccountsAsync(UserAccount userAccount)
+        public async Task AddEmployeeUserAccount(Employee employee, UserAccount userAccount)
         {
-            var employee = await FindEmployeeByIdAsync(userAccount.EmployeeId);
-
-            if (employee != null)
-            {
-                if (employee.UserAccounts == null)
-                    employee.UserAccounts = new List<UserAccount>();
-
-                if (!employee.UserAccounts.Contains(userAccount))
-                    employee.UserAccounts.Add(userAccount);
-
-                await _context.SaveChangesAsync();
-            }
+            employee.UserAccounts.Add(userAccount);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry)

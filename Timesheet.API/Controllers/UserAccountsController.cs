@@ -23,27 +23,13 @@ namespace Timesheet.API.Controllers
         [HttpPost]
         public async Task<ActionResult<UserAccount>> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
+            var result = await _userAccountService.CreateUserAccount(userAccountDto);
 
-            if (employee == null)
-                return NotFound($"No Employee was found with ID {userAccountDto.EmployeeId}.");
-
-            var errors = UserAccountValidation.Validate(userAccountDto);
-            if (errors.Count > 0)
-            {
-                return ValidationProblem(new ValidationProblemDetails(errors)
-                {
-                    Title = "One or more validation errors occurred.",
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-
-            var newUserAccount = await _userAccountService.CreateUserAccount(userAccountDto, employee);
-
-            if (newUserAccount == null)
-                return Conflict($"Email {userAccountDto.Email} is already in use.");
-
-            return CreatedAtAction(nameof(GetUserAccountById), new { id = newUserAccount.UserAccountId }, newUserAccount);
+            return result.IsSuccess
+                ? CreatedAtRoute("GetUserAccountById", new { id = result.Data!.UserAccountId }, result.Data)
+                : result.HasValidationErrors 
+                    ? BadRequest(result.ValidationErrors)
+                    : BadRequest(result.ErrorMessage);
         }
 
         [HttpGet("{id}", Name = "GetUserAccountById")]

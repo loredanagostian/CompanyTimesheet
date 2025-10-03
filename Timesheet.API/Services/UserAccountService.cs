@@ -1,7 +1,9 @@
-﻿using Timesheet.API.Models;
+﻿using System.Net;
+using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services.Interfaces;
+using Timesheet.API.Validations;
 
 namespace Timesheet.API.Services
 {
@@ -16,16 +18,49 @@ namespace Timesheet.API.Services
             _userAccountRepository = userAccountRepository ?? throw new ArgumentNullException(nameof(userAccountRepository));
         }
 
-        public async Task<UserAccount?> CreateUserAccount(CreateUserAccountDto userAccountDto, Employee employee)
+        private string ComputeEmail(Employee employee)
         {
-            var newUserAccountModel = await _userAccountRepository.CreateUserAccount(userAccountDto, employee);
+            var firstNamePart = employee.FirstName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].ToLower();
+            var lastNamePart = employee.LastName.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].ToLower();
 
-            if (newUserAccountModel == null)
-                return null;
+            return $"{firstNamePart}.{lastNamePart}@company.com";
+        }
 
-            await _employeeService.UpdateEmployeeUserAccountsAsync(newUserAccountModel);
+        public async Task<ServiceResult<UserAccount>> CreateUserAccount(CreateUserAccountDto userAccountDto)
+        {
+            var employee = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
 
-            return newUserAccountModel;
+            if (employee == null)
+                return ServiceResult<UserAccount>.Failure(
+                    $"No Employee was found with ID {userAccountDto.EmployeeId}."
+                );
+
+            var errors = UserAccountValidation.Validate(userAccountDto);
+
+            if (errors.Count > 0)
+                return ServiceResult<UserAccount>.ValidationFailure(errors);
+
+            var userAccount = await _userAccountRepository.GetUserAccountsByEmployeeId(userAccountDto.EmployeeId);
+
+            if (userAccount.Any(ua => ua.Email.Equals(userAccountDto.Email)))
+                return ServiceResult<UserAccount>.Failure(
+                    $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {userAccountDto.Email}."
+                );
+
+            var newUserAccount = new UserAccount
+            {
+                EmployeeId = userAccountDto.EmployeeId,
+                Email = userAccountDto.Email ?? ComputeEmail(employee),
+                Password = userAccountDto.Password ?? "P4$$W0Rd", // Temporary password if not provided
+                HasDefaultPassword = userAccountDto.Password == null,
+                IsAlias = userAccountDto.Email != null
+            };
+
+            await _userAccountRepository.CreateUserAccount(newUserAccount);
+
+            await _employeeService.AddEmployeeUserAccount(employee, newUserAccount);
+
+            return ServiceResult<UserAccount>.Success(newUserAccount);
         }
 
         public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()

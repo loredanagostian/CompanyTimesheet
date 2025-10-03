@@ -31,29 +31,10 @@ namespace Timesheet.API.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<UserAccount?> CreateUserAccount(CreateUserAccountDto userAccountDto, Employee employee)
+        public async Task CreateUserAccount(UserAccount userAccount)
         {
-            //var userAccountEntity = _mapper.Map<UserAccount>(userAccountDto);
-
-            var userAccountFound = await _context.UserAccounts.FindAsync(userAccountDto.Email);
-
-            if (userAccountFound != null)
-            {
-                return null;
-            }
-
-            var newUserAccount = new UserAccount
-            {
-                Email = userAccountDto.Email ?? $"{employee.FirstName}.{employee.LastName}@company.com",
-                Password = userAccountDto.Password ?? "Default1234",
-                EmployeeId = userAccountDto.EmployeeId,
-                IsAlias = userAccountDto.Email != null && userAccountDto.Password != null
-            };
-
-            await _context.UserAccounts.AddAsync(newUserAccount);
+            await _context.UserAccounts.AddAsync(userAccount);
             await _context.SaveChangesAsync();
-
-            return newUserAccount;
         }
 
         public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
