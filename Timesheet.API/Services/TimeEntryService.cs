@@ -23,14 +23,14 @@ namespace Timesheet.API.Services
 
         public async Task<TimeEntry?> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
         {
-            var employeeFound = await _employeeRepository.GetEmployeeByIdAsync(timeEntryDto.EmployeeId);
+            var employeeFound = await _employeeRepository.GetEmployeeById(timeEntryDto.EmployeeId);
 
-            if (employeeFound == null)
+            if (employeeFound is null)
                 return null;
 
             var newTimeEntry = await _timeEntryRepository.CreateTimeEntryAsync(timeEntryDto);
 
-            await _employeeRepository.UpdateEmployeeTimeEntriesAsync(newTimeEntry);
+            //await _employeeRepository.UpdateEmployeeTimeEntriesAsync(newTimeEntry);
 
             return newTimeEntry;
         }

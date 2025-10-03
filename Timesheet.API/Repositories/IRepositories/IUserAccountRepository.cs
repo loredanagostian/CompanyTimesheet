@@ -5,10 +5,10 @@ namespace Timesheet.API.Repositories.IRepositories
 {
     public interface IUserAccountRepository
     {
-        Task<int> DeleteUserAccountsByEmployeeIdAsync(int id);
         Task CreateUserAccount(UserAccount userAccount);
-        Task<IEnumerable<UserAccount>> GetUserAccountsAsync();
+        Task<ServiceResult<IEnumerable<UserAccount>>> GetUserAccounts();
         Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId);
         Task DeleteUserAccount(UserAccount userAccount);
+        Task<UserAccount?> GetUserAccountById(int id);
     }
 }

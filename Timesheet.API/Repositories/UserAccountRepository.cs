@@ -17,17 +17,13 @@ namespace Timesheet.API.Repositories
             //_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<int> DeleteUserAccountsByEmployeeIdAsync(int id)
+        public async Task<ServiceResult<IEnumerable<UserAccount>>> GetUserAccounts()
         {
-            var accounts = await _context.UserAccounts
-               .Where(u => u.EmployeeId == id)
-               .ToListAsync();
+            var userAccounts = await _context.UserAccounts
+                .AsNoTracking()
+                .ToListAsync();
 
-            if (accounts.Count == 0) return 0;
-
-            _context.UserAccounts.RemoveRange(accounts);
-
-            return await _context.SaveChangesAsync();
+            return ServiceResult<IEnumerable<UserAccount>>.Success(userAccounts);
         }
 
         public async Task CreateUserAccount(UserAccount userAccount)
@@ -36,18 +32,16 @@ namespace Timesheet.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
-        {
-            var userAccounts = await _context.UserAccounts.ToListAsync();
-            //return _mapper.Map<IEnumerable<UserAccount>>(userAccounts);
-            return userAccounts;
-        }
-
         public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
         {
             return await _context.UserAccounts
                 .Where(ua => ua.EmployeeId == employeeId)
                 .ToListAsync();
+        }
+
+        public async Task<UserAccount?> GetUserAccountById(int id)
+        {
+            return await _context.UserAccounts.FindAsync(id);
         }
 
         public async Task DeleteUserAccount(UserAccount userAccount)

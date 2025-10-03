@@ -53,9 +53,9 @@ namespace Timesheet.API.Services
 
         public async Task<ServiceResult<UserAccount>> CreateUserAccount(CreateUserAccountDto userAccountDto)
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(userAccountDto.EmployeeId);
+            var result = await _employeeService.GetEmployeeById(userAccountDto.EmployeeId);
 
-            if (employee == null)
+            if (!result.IsSuccess || result.Data is null)
                 return ServiceResult<UserAccount>.Failure(
                     $"No Employee was found with ID {userAccountDto.EmployeeId}."
                 );
@@ -65,47 +65,61 @@ namespace Timesheet.API.Services
             if (errors.Count > 0)
                 return ServiceResult<UserAccount>.ValidationFailure(errors);
 
+            var employee = result.Data;
+
             var newUserAccount = new UserAccount
             {
                 EmployeeId = userAccountDto.EmployeeId,
                 Email = userAccountDto.Email ?? ComputeEmail(employee),
                 Password = userAccountDto.Password ?? "P4$$W0Rd", // Temporary password if not provided
-                HasDefaultPassword = userAccountDto.Password == null,
-                IsAlias = userAccountDto.Email != null
+                HasDefaultPassword = userAccountDto.Password is null,
+                IsAlias = userAccountDto.Email is not null
             };
 
-            var userAccount = await _userAccountRepository.GetUserAccountsByEmployeeId(userAccountDto.EmployeeId);
-
-            if (userAccount.Any(ua => ua.Email.Equals(newUserAccount.Email)))
+            if ((employee.UserAccounts ?? []).Any(ua => ua.Email.Equals(newUserAccount.Email)))
                 return ServiceResult<UserAccount>.Failure(
                     $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {newUserAccount.Email}."
                 );
 
             await _userAccountRepository.CreateUserAccount(newUserAccount);
 
-            await _employeeService.AddEmployeeUserAccount(employee, newUserAccount);
-
             return ServiceResult<UserAccount>.Success(newUserAccount);
         }
 
-        public async Task<IEnumerable<UserAccount>> GetUserAccountsAsync()
+        public async Task<ServiceResult<IEnumerable<UserAccount>>> GetUserAccounts()
         {
-            return await _userAccountRepository.GetUserAccountsAsync();
+            return await _userAccountRepository.GetUserAccounts();
         }
 
-        public async Task<int> DeleteUserAccountAsync(int id)
+        public async Task<ServiceResult<UserAccount>> GetUserAccountById(int userAccountId)
         {
-            return await _userAccountRepository.DeleteUserAccountsByEmployeeIdAsync(id);
+            var userAccount = await _userAccountRepository.GetUserAccountById(userAccountId);
+
+            if (userAccount is null)
+                return ServiceResult<UserAccount>.Failure(
+                    $"No User Account was found with ID {userAccountId}."
+                );
+
+            return ServiceResult<UserAccount>.Success(userAccount);
         }
 
-        public async Task DeleteUserAccount(UserAccount userAccount)
+        public async Task<ServiceResult<UserAccount>> DeleteUserAccount(int userAccountId)
         {
+            var userAccount = await _userAccountRepository.GetUserAccountById(userAccountId);
+
+            if (userAccount is null)
+                return ServiceResult<UserAccount>.Failure(
+                    $"No User Account was found with ID {userAccountId}."
+                );
+
             await _userAccountRepository.DeleteUserAccount(userAccount);
+
+            return ServiceResult<UserAccount>.Success(userAccount);
         }
 
-        public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
-        {
-            return await _userAccountRepository.GetUserAccountsByEmployeeId(employeeId);
-        }
+        //public async Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId)
+        //{
+        //    return await _userAccountRepository.GetUserAccountsByEmployeeId(employeeId);
+        //}
     }
 }

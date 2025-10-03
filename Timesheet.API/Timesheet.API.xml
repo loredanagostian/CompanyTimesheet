@@ -35,5 +35,17 @@
         <member name="M:Timesheet.API.Migrations.newcolumnsforuseraccount.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Timesheet.API.Migrations.addedemployeetouseraccount">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetouseraccount.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetouseraccount.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetouseraccount.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

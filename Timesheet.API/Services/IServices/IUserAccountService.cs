@@ -6,9 +6,10 @@ namespace Timesheet.API.Services.Interfaces
     public interface IUserAccountService
     {
         Task<ServiceResult<UserAccount>> CreateUserAccount(CreateUserAccountDto userAccountDto);
-        Task<IEnumerable<UserAccount>> GetUserAccountsAsync();
-        Task<int> DeleteUserAccountAsync(int id);
-        Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId);
-        Task DeleteUserAccount(UserAccount userAccount);
+        Task<ServiceResult<IEnumerable<UserAccount>>> GetUserAccounts();
+        //Task<int> DeleteUserAccount(int id);
+        //Task<IEnumerable<UserAccount>> GetUserAccountsByEmployeeId(int employeeId);
+        Task<ServiceResult<UserAccount>> DeleteUserAccount(int userAccountId);
+        Task<ServiceResult<UserAccount>> GetUserAccountById(int userAccountId);
     }
 }

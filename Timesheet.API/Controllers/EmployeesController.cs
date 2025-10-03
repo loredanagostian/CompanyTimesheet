@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Services.Interfaces;
-using Timesheet.API.Validations;
 
 namespace Timesheet.API.Controllers
 {
@@ -12,81 +10,61 @@ namespace Timesheet.API.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IUserAccountService _userAccountService;
-        private readonly IMapper _mapper;
 
-        public EmployeesController(IEmployeeService employeeService, IUserAccountService userAccountService, IMapper mapper) {
+        public EmployeesController(IEmployeeService employeeService) {
             _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
-            _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeesAsync()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
-            var employees = await _employeeService.GetEmployeesAsync();
+            var result = await _employeeService.GetEmployees();
             
-            return Ok(employees);
+            return Ok(result.Data);
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[ApiVersion("3.0")]
-        public async Task<ActionResult<Employee>> CreateEmployeeAsync([FromBody] CreateEmployeeDto employeeDto)
+        public async Task<ActionResult<Employee>> CreateEmployee([FromBody] CreateEmployeeDto employeeDto)
         {
-            var errors = EmployeeValidation.Validate(employeeDto);
-            if (errors.Count > 0)
-            {
-                return ValidationProblem(new ValidationProblemDetails(errors)
-                {
-                    Title = "One or more validation errors occurred.",
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
+            var result = await _employeeService.CreateEmployee(employeeDto);
 
-            var employeeExists = await _employeeService.FindEmployeeByCNP(employeeDto.CNP);
+            if (result.IsSuccess && result.Data is null)
+                return Problem("An unexpected error occurred while creating the User Account.");
 
-            if (employeeExists is not null)
-            {
-                return Conflict($"An employee with CNP {employeeDto.CNP} already exists.");
-            }
-
-            var newEmployee = await _employeeService.CreateEmployeeAsync(employeeDto);
-            
-            return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeId }, newEmployee);
+            return result.IsSuccess
+                ? CreatedAtRoute("GetEmployeeById", new { id = result.Data!.EmployeeId }, result.Data)
+                : result.HasValidationErrors
+                    ? BadRequest(result.ValidationErrors)
+                    : BadRequest(result.ErrorMessage);
         }
 
         [HttpGet("{id}", Name = "GetEmployeeById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Employee>> GetEmployeeById(int id)
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(id);
-            if (employee is null) return NotFound();
+            var result = await _employeeService.GetEmployeeById(id);
             
-            return Ok(employee);
+            return result.IsSuccess
+                ? Ok(result.Data)
+                : BadRequest(result.ErrorMessage);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> RemoveEmployeeAsync(int employeeIdNumber)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteEmployee(int employeeId)
         {
-            var employee = await _employeeService.GetEmployeeByIdAsync(employeeIdNumber);
+            var result = await _employeeService.DeleteEmployee(employeeId);
 
-            if (employee is null)
-            {
-                return NotFound($"No Employee was found with ID {employeeIdNumber}.");
-            }
-
-            var userAccounts = await _userAccountService.GetUserAccountsByEmployeeId(employee.EmployeeId);
-
-            if (userAccounts.Any())
-            {
-                foreach (var account in userAccounts)
-                {
-                    await _userAccountService.DeleteUserAccount(account);
-                }
-            }
-
-            await _employeeService.DeleteEmployee(employee);
-
-            return NoContent();
+            return result.IsSuccess
+                ? NoContent()
+                : BadRequest(result.ErrorMessage);
         }
     }
 }

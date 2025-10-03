@@ -5,13 +5,11 @@ namespace Timesheet.API.Repositories.IRepositories
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetEmployeesAsync();
-        Task<Employee> CreateEmployee(CreateEmployeeDto createEmployeeDto);
-        Task<Employee?> GetEmployeeByIdAsync(int employeeIdNumber);
+        Task<IEnumerable<Employee>> GetEmployees();
+        Task CreateEmployee(Employee employee);
+        Task<Employee?> GetEmployeeById(int id);
         Task DeleteEmployee(Employee employee);
-        Task<Employee?> FindEmployeeByIdAsync(int id);
-        Task AddEmployeeUserAccount(Employee employee, UserAccount userAccount);
-        Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry);
-        Task<Employee?> FindEmployeeByCNP(string cnp);
+        //Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry);
+        Task<Employee?> GetEmployeeByCNP(string cnp);
     }
 }

@@ -8,5 +8,6 @@
         public string Password { get; set; } = string.Empty;
         public bool HasDefaultPassword { get; set; } = true;
         public bool IsAlias { get; set; } = false;
+        public Employee? Employee { get; set; }
     }
 }

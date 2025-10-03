@@ -1,9 +1,7 @@
 ﻿//using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Timesheet.API.DbContexts;
-using Timesheet.API.Extensions;
 using Timesheet.API.Models;
-using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 
 namespace Timesheet.API.Repositories
@@ -19,45 +17,38 @@ namespace Timesheet.API.Repositories
             //_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetEmployees()
         {
             var employees = await _context.Employees
                 .Include(e => e.UserAccounts)
+                .Include(e => e.TimeEntries)
                 .AsNoTracking()
                 .ToListAsync();
 
             return employees;
         }
 
-        public async Task<Employee> CreateEmployee(CreateEmployeeDto employeeDto)
+        public async Task CreateEmployee(Employee employee)
         {
-            var contractTypeParsed = Enum.Parse<ContractType>(employeeDto.ContractType!.Trim(), ignoreCase: true);
-
-            //var employeeEntity = _mapper.Map<Employee>(employeeDto);
-            var newEmployee = new Employee
-            {
-                FirstName = employeeDto.FirstName.CapitalizeFirstLetter(),
-                LastName = employeeDto.LastName.CapitalizeFirstLetter(),
-                CNP = employeeDto.CNP,
-                ContractType = contractTypeParsed,
-            };
-
-            await _context.Employees.AddAsync(newEmployee);
+            await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
-
-            return newEmployee;
         }
 
-        public async Task<Employee?> GetEmployeeByIdAsync(int id)
+        public async Task<Employee?> GetEmployeeById(int id)
         {
-            var entity = await FindEmployeeByIdAsync(id);
-            return entity is null ? null : entity;
+            var entity = await _context.Employees
+                .Include(e => e.UserAccounts)
+                .Include(e => e.TimeEntries)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.EmployeeId == id);
+
+            return entity;
         }
 
-        public async Task<Employee?> FindEmployeeByIdAsync(int id)
-        {
-            return await _context.Employees.FindAsync(id);
-        }
+        //public async Task<Employee?> FindEmployeeByIdAsync(int id)
+        //{
+        //    return await _context.Employees.FindAsync(id);
+        //}
 
         public async Task DeleteEmployee(Employee employee)
         {
@@ -65,29 +56,23 @@ namespace Timesheet.API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddEmployeeUserAccount(Employee employee, UserAccount userAccount)
-        {
-            employee.UserAccounts.Add(userAccount);
-            await _context.SaveChangesAsync();
-        }
+        //public async Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry)
+        //{
+        //    var employee = await FindEmployeeByIdAsync(timeEntry.EmployeeId);
 
-        public async Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry)
-        {
-            var employee = await FindEmployeeByIdAsync(timeEntry.EmployeeId);
+        //    if (employee != null)
+        //    {
+        //        if (employee.TimeEntries == null)
+        //            employee.TimeEntries = new List<TimeEntry>();
 
-            if (employee != null)
-            {
-                if (employee.TimeEntries == null)
-                    employee.TimeEntries = new List<TimeEntry>();
+        //        if (!employee.TimeEntries.Contains(timeEntry))
+        //            employee.TimeEntries.Add(timeEntry);
 
-                if (!employee.TimeEntries.Contains(timeEntry))
-                    employee.TimeEntries.Add(timeEntry);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //}
 
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<Employee?> FindEmployeeByCNP(string cnp)
+        public async Task<Employee?> GetEmployeeByCNP(string cnp)
         {
             var employee = await _context.Employees
                 .AsNoTracking()

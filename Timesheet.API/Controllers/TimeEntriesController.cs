@@ -29,7 +29,7 @@ namespace Timesheet.API.Controllers
         {
             var newTimeEntry = await _timeEntryService.CreateTimeEntryAsync(timeEntryDto);
 
-            if (newTimeEntry == null)
+            if (newTimeEntry is null)
                 return NotFound("No Employee was found with this ID.");
 
             return Ok(newTimeEntry);
@@ -38,14 +38,14 @@ namespace Timesheet.API.Controllers
         [HttpGet("employee/{id}")]
         public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesByEmployeeIdAsync(int id)
         {
-            var employeeFound = await _employeeService.GetEmployeeByIdAsync(id);
+            var employeeFound = await _employeeService.DeleteEmployee(id);
 
-            if (employeeFound == null)
+            if (employeeFound is null)
                 return NotFound("No User Account was found with this Employee ID.");
 
             var timeEntries = await _timeEntryService.GetTimeEntriesByEmployeeIdAsync(id);
 
-            if (timeEntries == null)
+            if (timeEntries is null)
                 return NotFound("No Time Entries were found for this Employee ID.");
 
             return Ok(timeEntries);

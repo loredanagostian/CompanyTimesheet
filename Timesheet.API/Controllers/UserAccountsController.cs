@@ -10,12 +10,19 @@ namespace Timesheet.API.Controllers
     public class UserAccountsController : ControllerBase
     {
         private readonly IUserAccountService _userAccountService;
-        private readonly IEmployeeService _employeeService;
 
-        public UserAccountsController(IUserAccountService userAccountService, IEmployeeService employeeService)
+        public UserAccountsController(IUserAccountService userAccountService)
         {
             _userAccountService = userAccountService ?? throw new ArgumentNullException(nameof(userAccountService));
-            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccounts()
+        {
+            var result = await _userAccountService.GetUserAccounts();
+
+            return Ok(result.Data);
         }
 
         [HttpPost]
@@ -26,7 +33,7 @@ namespace Timesheet.API.Controllers
         {
             var result = await _userAccountService.CreateUserAccount(userAccountDto);
 
-            if (result.IsSuccess && result.Data == null)
+            if (result.IsSuccess && result.Data is null)
                 return Problem("An unexpected error occurred while creating the User Account.");
 
             return result.IsSuccess
@@ -37,30 +44,27 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUserAccountById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserAccount>> GetUserAccountById(int id)
         {
-            var userAccount = await _userAccountService.GetUserAccountsAsync();
-            if (userAccount == null)
-                return NotFound("No User Account was found with this ID.");
-            return Ok(userAccount);
-        }
+            var result = await _userAccountService.GetUserAccountById(id);
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccounts()
-        {
-            var userAccounts = await _userAccountService.GetUserAccountsAsync();
-            return Ok(userAccounts);
+            return result.IsSuccess
+                ? Ok(result.Data)
+                : BadRequest(result.ErrorMessage);
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteUser(int employeeId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteUserAccount(int userAccountId)
         {
-            var userAccountDeletedStatus = await _userAccountService.DeleteUserAccountAsync(employeeId);
+            var result = await _userAccountService.DeleteUserAccount(userAccountId);
 
-            if (userAccountDeletedStatus == 0)
-                return NotFound("No User Account was found with this ID.");
-
-            return NoContent();
+            return result.IsSuccess
+                ? NoContent()
+                : BadRequest(result.ErrorMessage);
         }
     }
 }
