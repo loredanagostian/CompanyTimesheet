@@ -21,9 +21,15 @@ namespace Timesheet.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserAccount>> CreateUser([FromBody] CreateUserAccountDto userAccountDto)
         {
             var result = await _userAccountService.CreateUserAccount(userAccountDto);
+
+            if (result.IsSuccess && result.Data == null)
+                return Problem("An unexpected error occurred while creating the User Account.");
 
             return result.IsSuccess
                 ? CreatedAtRoute("GetUserAccountById", new { id = result.Data!.UserAccountId }, result.Data)
