@@ -9,7 +9,7 @@
         public string FirstName { get; set; } = string.Empty;
         public string LastName  { get; set; } = string.Empty;
         public ContractType ContractType { get; set; }
-        public List<UserAccount>? UserAccounts { get; set; }
-        public List<TimeEntry>? TimeEntries { get; set; }
+        public ICollection<UserAccount>? UserAccounts { get; set; }
+        public ICollection<TimeEntry>? TimeEntries { get; set; }
     }
 }

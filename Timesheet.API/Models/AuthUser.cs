@@ -13,7 +13,7 @@
 
         public AuthUser() { } // for serializers
 
-        public AuthUser(string email, int employeeId, string? firstName = null, string? lastName = null)
+        public AuthUser(string email, int employeeId, string firstName = "", string lastName = "")
         {
             Email = email ?? throw new ArgumentNullException(nameof(email));
             EmployeeId = employeeId;

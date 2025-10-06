@@ -71,5 +71,17 @@
         <member name="M:Timesheet.API.Migrations.changetodateonlyfortimeentry.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Timesheet.API.Migrations.replacedlistwithicollection">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.replacedlistwithicollection.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.replacedlistwithicollection.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.replacedlistwithicollection.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
