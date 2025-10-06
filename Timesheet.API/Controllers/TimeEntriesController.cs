@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
+using Timesheet.API.Services;
 using Timesheet.API.Services.Interfaces;
 
 namespace Timesheet.API.Controllers
@@ -9,46 +10,61 @@ namespace Timesheet.API.Controllers
     [ApiController]
     public class TimeEntriesController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
         private readonly ITimeEntryService _timeEntryService;
 
-        public TimeEntriesController(IEmployeeService employeeService, ITimeEntryService timeEntryService)
+        public TimeEntriesController(ITimeEntryService timeEntryService)
         {
-            _employeeService = employeeService ?? throw new ArgumentNullException(nameof(employeeService));
             _timeEntryService = timeEntryService ?? throw new ArgumentNullException(nameof(timeEntryService));
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesAsync()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntries()
         {
-            return Ok(await _timeEntryService.GetTimeEntriesAsync());
+            var result = await _timeEntryService.GetTimeEntries();
+
+            return Ok(result.Data);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TimeEntry>> CreateTimeEntryAsync([FromBody] CreateTimeEntryDto timeEntryDto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<TimeEntry>> CreateTimeEntry([FromBody] CreateTimeEntryDto timeEntryDto)
         {
-            var newTimeEntry = await _timeEntryService.CreateTimeEntryAsync(timeEntryDto);
+            var result = await _timeEntryService.CreateTimeEntry(timeEntryDto);
 
-            if (newTimeEntry is null)
-                return NotFound("No Employee was found with this ID.");
+            if (result.IsSuccess && result.Data is null)
+                return Problem("An unexpected error occurred while creating the User Account.");
 
-            return Ok(newTimeEntry);
+            return result.IsSuccess
+                ? CreatedAtRoute("GetTimeEntryById", new { id = result.Data!.TimeEntryId }, result.Data)
+                : result.HasValidationErrors
+                    ? BadRequest(result.ValidationErrors)
+                    : BadRequest(result.ErrorMessage);
         }
 
-        [HttpGet("employee/{id}")]
-        public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesByEmployeeIdAsync(int id)
+        [HttpGet("{id}", Name = "GetTimeEntryById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<TimeEntry>> GetTimeEntryById(int id)
         {
-            var employeeFound = await _employeeService.DeleteEmployee(id);
+            var result = await _timeEntryService.GetTimeEntryById(id);
+            return result.IsSuccess
+                ? Ok(result.Data)
+                : BadRequest(result.ErrorMessage);
+        }
 
-            if (employeeFound is null)
-                return NotFound("No User Account was found with this Employee ID.");
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteTimeEntry(int id)
+        {
+            var result = await _timeEntryService.DeleteTimeEntry(id);
 
-            var timeEntries = await _timeEntryService.GetTimeEntriesByEmployeeIdAsync(id);
-
-            if (timeEntries is null)
-                return NotFound("No Time Entries were found for this Employee ID.");
-
-            return Ok(timeEntries);
+            return result.IsSuccess
+                ? NoContent()
+                : BadRequest(result.ErrorMessage);
         }
     }
 }

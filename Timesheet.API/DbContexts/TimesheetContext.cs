@@ -51,7 +51,13 @@ namespace Timesheet.API.DbContexts
             //        }
             //    );
 
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TimeEntry>(e =>
+            {
+                e.Property(t => t.Date)
+                 .HasColumnType("date"); // ensures DATE column, not datetime2
+            });
         }
     }
 }

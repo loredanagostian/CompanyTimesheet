@@ -67,19 +67,22 @@ namespace Timesheet.API.Services
 
             var employee = result.Data;
 
+            // Create the email
+            var email = userAccountDto.Email?.TrimToNull() ?? ComputeEmail(employee);
+
+            if ((employee.UserAccounts ?? []).Any(ua => ua.Email.Equals(email)))
+                return ServiceResult<UserAccount>.Failure(
+                    $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {email}."
+                );
+
             var newUserAccount = new UserAccount
             {
                 EmployeeId = userAccountDto.EmployeeId,
-                Email = userAccountDto.Email ?? ComputeEmail(employee),
+                Email = email,
                 Password = userAccountDto.Password ?? "P4$$W0Rd", // Temporary password if not provided
                 HasDefaultPassword = userAccountDto.Password is null,
                 IsAlias = userAccountDto.Email is not null
             };
-
-            if ((employee.UserAccounts ?? []).Any(ua => ua.Email.Equals(newUserAccount.Email)))
-                return ServiceResult<UserAccount>.Failure(
-                    $"An User Account already exists for Employee with ID {userAccountDto.EmployeeId} and Email {newUserAccount.Email}."
-                );
 
             await _userAccountRepository.CreateUserAccount(newUserAccount);
 

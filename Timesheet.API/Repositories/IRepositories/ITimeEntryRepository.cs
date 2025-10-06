@@ -5,8 +5,9 @@ namespace Timesheet.API.Repositories.IRepositories
 {
     public interface ITimeEntryRepository
     {
-        Task<IEnumerable<TimeEntry>> GetTimeEntriesAsync();
-        Task<TimeEntry> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto);
-        Task<IEnumerable<TimeEntry>> GetTimeEntriesByEmployeeIdAsync(int id);
+        Task<ServiceResult<IEnumerable<TimeEntry>>> GetTimeEntries();
+        Task CreateTimeEntry(TimeEntry timeEntry);
+        Task<TimeEntry?> GetTimeEntryById(int id);
+        Task DeleteTimeEntry(TimeEntry timeEntry);
     }
 }

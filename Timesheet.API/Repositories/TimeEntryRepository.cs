@@ -19,38 +19,31 @@ namespace Timesheet.API.Repositories
             //_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesAsync()
-        {
-            var timeEntries = await _context.TimeEntries.ToListAsync();
-
-            return timeEntries;
-        }
-
-        public async Task<TimeEntry> CreateTimeEntryAsync(CreateTimeEntryDto timeEntryDto)
-        {
-            //var timeEntryEntity = _mapper.Map<TimeEntry>(timeEntryDto);
-            var newTimeEntry = new TimeEntry
-            {
-                EmployeeId = timeEntryDto.EmployeeId,
-                Date = timeEntryDto.Date,
-                HoursWorked = timeEntryDto.HoursWorked,
-            };
-
-            await _context.TimeEntries.AddAsync(newTimeEntry);
-            await _context.SaveChangesAsync();
-
-            return newTimeEntry;
-        }
-
-        [HttpGet("/employee/{id}")]
-        public async Task<IEnumerable<TimeEntry>> GetTimeEntriesByEmployeeIdAsync(int id)
+        public async Task<ServiceResult<IEnumerable<TimeEntry>>> GetTimeEntries()
         {
             var timeEntries = await _context.TimeEntries
-                .Where(t => t.EmployeeId == id)
+                .Include(te => te.Employee)
+                .AsNoTracking()
                 .ToListAsync();
 
-            //return _mapper.Map<IEnumerable<TimeEntry>>(timeEntries);
-            return timeEntries;
+            return ServiceResult<IEnumerable<TimeEntry>>.Success(timeEntries);
+        }
+
+        public async Task CreateTimeEntry(TimeEntry timeEntry)
+        {
+            await _context.TimeEntries.AddAsync(timeEntry);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<TimeEntry?> GetTimeEntryById(int id)
+        {
+            return await _context.TimeEntries.FindAsync(id);
+        }
+
+        public async Task DeleteTimeEntry(TimeEntry timeEntry)
+        {
+            _context.TimeEntries.Remove(timeEntry);
+            await _context.SaveChangesAsync();
         }
     }
 }

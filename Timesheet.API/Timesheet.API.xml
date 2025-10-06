@@ -47,5 +47,29 @@
         <member name="M:Timesheet.API.Migrations.addedemployeetouseraccount.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Timesheet.API.Migrations.addedemployeetotimeentry">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetotimeentry.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetotimeentry.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.addedemployeetotimeentry.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Timesheet.API.Migrations.changetodateonlyfortimeentry">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changetodateonlyfortimeentry.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changetodateonlyfortimeentry.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Timesheet.API.Migrations.changetodateonlyfortimeentry.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>
