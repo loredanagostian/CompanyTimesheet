@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using Timesheet.API.Models;
+using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services;
 using Xunit;
@@ -18,6 +19,7 @@ namespace Timesheet.Tests.Services
             _employeeService = new EmployeeService(_employeeRepoMock.Object);
         }
 
+        // GET Employees
         [Fact]
         public async Task GetEmployees_ShouldReturnAll_WhenRepositoryReturnsData()
         {
@@ -39,6 +41,246 @@ namespace Timesheet.Tests.Services
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().HaveCount(2);
             _employeeRepoMock.Verify(r => r.GetEmployees(), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetEmployees_ShouldReturnEmpty_WhenRepositoryIsEmpty()
+        {
+            // Arrange
+            _employeeRepoMock
+                .Setup(repo => repo.GetEmployees())
+                .ReturnsAsync(Enumerable.Empty<Employee>());
+
+            // Act
+            var result = await _employeeService.GetEmployees();
+
+            // Assert
+            result.Data.Should().BeEmpty();
+            _employeeRepoMock.Verify(repo => repo.GetEmployees(), Times.Once);
+        }
+
+        // CREATE Employee
+        [Fact]
+        public async Task CreateEmployee_ShouldReturnValidationError_WhenInvalidInput()
+        {
+            // Arrange
+            var dto = new CreateEmployeeDto
+            {
+                FirstName = "Ana123", // invalid because of numbers
+                LastName = "",
+                CNP = "abc", // invalid
+                ContractType = "SomethingInvalid"
+            };
+
+            // Act
+            var result = await _employeeService.CreateEmployee(dto);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.HasValidationErrors.Should().BeTrue();
+            result.ValidationErrors.Should().ContainKey("firstName");
+            result.ValidationErrors.Should().ContainKey("cnp");
+            result.ValidationErrors.Should().ContainKey("contractType");
+
+            // Repo should NOT be called
+            _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task CreateEmployee_ShouldReturnFailure_WhenCnpAlreadyExists()
+        {
+            // Arrange
+            var dto = new CreateEmployeeDto
+            {
+                FirstName = "Ana",
+                LastName = "Ionescu",
+                CNP = "1234567890123",
+                ContractType = "FullTime"
+            };
+
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeByCNP(dto.CNP))
+                .ReturnsAsync(new Employee { CNP = dto.CNP });
+
+            // Act
+            var result = await _employeeService.CreateEmployee(dto);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Contain("already exists");
+            _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task CreateEmployee_ShouldCallRepository_WhenValidAndUnique()
+        {
+            // Arrange
+            var dto = new CreateEmployeeDto
+            {
+                FirstName = "Ana",
+                LastName = "Ionescu",
+                CNP = "1234567890123",
+                ContractType = "FullTime"
+            };
+
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeByCNP(dto.CNP))
+                .ReturnsAsync((Employee?)null);
+
+            _employeeRepoMock
+                .Setup(r => r.CreateEmployee(It.IsAny<Employee>()))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _employeeService.CreateEmployee(dto);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data!.CNP.Should().Be(dto.CNP);
+            _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Once);
+        }
+
+        // GET Employee by ID
+        [Fact]
+        public async Task GetEmployeeById_ShouldReturnFailure_WhenIdNotExists()
+        {
+            // Arrange
+            int employeeId = 1;
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeById(employeeId))
+                .ReturnsAsync((Employee?)null);
+
+            // Act
+            var result = await _employeeService.GetEmployeeById(employeeId);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Contain("not found");
+            _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetEmployeeById_ShouldReturnEmployee_WhenIdExists()
+        {
+            // Arrange
+            int employeeId = 1;
+            var employee = new Employee
+            {
+                EmployeeId = employeeId,
+                FirstName = "Ana",
+                LastName = "Ionescu",
+                CNP = "1234567890123",
+                ContractType = ContractType.FullTime
+            };
+
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeById(employeeId))
+                .ReturnsAsync(employee);
+
+            // Act
+            var result = await _employeeService.GetEmployeeById(employeeId);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data!.EmployeeId.Should().Be(employeeId);
+            _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
+        }
+
+        // DELETE Employee
+        [Fact]
+        public async Task DeleteEmployee_ShouldReturnFailure_WhenIdNotExists()
+        {
+            // Arrange
+            int employeeId = 1;
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeById(employeeId))
+                .ReturnsAsync((Employee?)null);
+
+            // Act
+            var result = await _employeeService.DeleteEmployee(employeeId);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Contain("not found");
+            _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
+            _employeeRepoMock.Verify(r => r.DeleteEmployee(It.IsAny<Employee>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task DeleteEmployee_ShouldCallRepository_WhenIdExists()
+        {
+            // Arrange
+            int employeeId = 1;
+            var employee = new Employee
+            {
+                EmployeeId = employeeId,
+                FirstName = "Ana",
+                LastName = "Ionescu",
+                CNP = "1234567890123",
+                ContractType = ContractType.FullTime
+            };
+
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeById(employeeId))
+                .ReturnsAsync(employee);
+
+            _employeeRepoMock
+                .Setup(r => r.DeleteEmployee(employee))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _employeeService.DeleteEmployee(employeeId);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
+            _employeeRepoMock.Verify(r => r.DeleteEmployee(employee), Times.Once);
+        }
+
+        // GET Employee by CNP
+        [Fact]
+        public async Task GetEmployeeByCNP_ShouldReturnNull_WhenCnpNotExists()
+        {
+            // Arrange
+            string cnp = "1234567890123";
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeByCNP(cnp))
+                .ReturnsAsync((Employee?)null);
+
+            // Act
+            var result = await _employeeService.GetEmployeeByCNP(cnp);
+
+            // Assert
+            result.Should().BeNull();
+            _employeeRepoMock.Verify(r => r.GetEmployeeByCNP(cnp), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetEmployeeByCNP_ShouldReturnEmployee_WhenCnpExists()
+        {
+            // Arrange
+            string cnp = "1234567890123";
+            var employee = new Employee
+            {
+                EmployeeId = 1,
+                FirstName = "Ana",
+                LastName = "Ionescu",
+                CNP = cnp,
+                ContractType = ContractType.FullTime
+            };
+            _employeeRepoMock
+                .Setup(r => r.GetEmployeeByCNP(cnp))
+                .ReturnsAsync(employee);
+
+            // Act
+            var result = await _employeeService.GetEmployeeByCNP(cnp);
+
+            // Assert
+            result.Should().NotBeNull();
+            result!.CNP.Should().Be(cnp);
+            _employeeRepoMock.Verify(r => r.GetEmployeeByCNP(cnp), Times.Once);
         }
     }
 }
