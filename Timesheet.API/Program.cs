@@ -20,12 +20,20 @@ builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddDbContext<TimesheetContext>(
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<TimesheetContext>(options =>
+        options.UseInMemoryDatabase("TimesheetTestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<TimesheetContext>(
     //=> dbContextOptions.UseSqlite(
     //    builder.Configuration["ConnectionStrings:TimesheetDbConnectionString"]));
     dbContextOptions => dbContextOptions.UseSqlServer(
         builder.Configuration["ConnectionStrings:TimesheetDbConnectionString"])
     .EnableSensitiveDataLogging());
+}
 
 builder.Services
     .AddControllers()

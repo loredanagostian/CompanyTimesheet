@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timesheet.API", "Timesheet.API\Timesheet.API.csproj", "{A6DFE2BD-C71E-4004-92EA-70A81C9C6C29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timesheet.Tests", "Timesheet.Tests\Timesheet.Tests.csproj", "{29AC0102-9D68-45EC-A55C-86FBA3481558}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A6DFE2BD-C71E-4004-92EA-70A81C9C6C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6DFE2BD-C71E-4004-92EA-70A81C9C6C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6DFE2BD-C71E-4004-92EA-70A81C9C6C29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29AC0102-9D68-45EC-A55C-86FBA3481558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29AC0102-9D68-45EC-A55C-86FBA3481558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29AC0102-9D68-45EC-A55C-86FBA3481558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29AC0102-9D68-45EC-A55C-86FBA3481558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
