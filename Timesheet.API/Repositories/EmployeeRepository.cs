@@ -45,32 +45,11 @@ namespace Timesheet.API.Repositories
             return entity;
         }
 
-        //public async Task<Employee?> FindEmployeeByIdAsync(int id)
-        //{
-        //    return await _context.Employees.FindAsync(id);
-        //}
-
         public async Task DeleteEmployee(Employee employee)
         {
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
         }
-
-        //public async Task UpdateEmployeeTimeEntriesAsync(TimeEntry timeEntry)
-        //{
-        //    var employee = await FindEmployeeByIdAsync(timeEntry.EmployeeId);
-
-        //    if (employee != null)
-        //    {
-        //        if (employee.TimeEntries == null)
-        //            employee.TimeEntries = new List<TimeEntry>();
-
-        //        if (!employee.TimeEntries.Contains(timeEntry))
-        //            employee.TimeEntries.Add(timeEntry);
-
-        //        await _context.SaveChangesAsync();
-        //    }
-        //}
 
         public async Task<Employee?> GetEmployeeByCNP(string cnp)
         {
