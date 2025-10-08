@@ -54,6 +54,8 @@ namespace Timesheet.Tests.Services
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
             result.Data!.Should().HaveCount(1);
+
+            _userAccountRepoMock.Verify(r => r.GetUserAccounts(), Times.Once);
         }
 
         [Fact]
@@ -71,6 +73,8 @@ namespace Timesheet.Tests.Services
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
             result.Data!.Should().BeEmpty();
+
+            _userAccountRepoMock.Verify(r => r.GetUserAccounts(), Times.Once);
         }
 
         // CREATE User Account
@@ -95,6 +99,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Contain($"No Employee was found with ID {empId}");
+
             _userAccountRepoMock.Verify(r => r.CreateUserAccount(It.IsAny<UserAccount>()), Times.Never);
         }
 
@@ -121,8 +126,10 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
+            result.HasValidationErrors.Should().BeTrue();
             result.ValidationErrors.Should().ContainKey("email");
             result.ValidationErrors.Should().ContainKey("password");
+
             _userAccountRepoMock.Verify(r => r.CreateUserAccount(It.IsAny<UserAccount>()), Times.Never);
         }
 
@@ -151,7 +158,7 @@ namespace Timesheet.Tests.Services
             var dto = new CreateUserAccountDto
             {
                 EmployeeId = empId,
-                Email = existingEmail, // trying to create with same email
+                Email = existingEmail // trying to create with same email
             };
 
             // Act
@@ -159,7 +166,9 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
+            result.Data.Should().BeNull();
             result.ErrorMessage.Should().Contain($"An User Account already exists for Employee with ID {empId} and Email {dto.Email}");
+
             _userAccountRepoMock.Verify(r => r.CreateUserAccount(It.IsAny<UserAccount>()), Times.Never);
         }
 
@@ -217,7 +226,7 @@ namespace Timesheet.Tests.Services
 
         // GET User Account by ID
         [Fact]
-        public async Task GetUserAccountById_ShouldReturnFailure_WhenIdNotExists()
+        public async Task GetUserAccountById_ShouldReturnFailure_WhenIdNotFound()
         {
             // Arrange
             int userAccountId = 1;
@@ -230,12 +239,14 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
+            result.Data.Should().BeNull();
             result.ErrorMessage.Should().Contain($"No User Account was found with ID {userAccountId}");
+
             _userAccountRepoMock.Verify(r => r.GetUserAccountById(userAccountId), Times.Once);
         }
 
         [Fact]
-        public async Task GetUserAccountById_ShouldReturnUserAccount_WhenIdExists()
+        public async Task GetUserAccountById_ShouldReturnUserAccount_WhenIdFound()
         {
             // Arrange
             var emp = Emp();
@@ -261,7 +272,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.UserAccountId.Should().Be(accountId);
+            result.Data.UserAccountId.Should().Be(accountId);
             result.Data.EmployeeId.Should().Be(emp.EmployeeId);
             result.Data.Email.Should().Be(expectedEmail);
 
@@ -270,7 +281,7 @@ namespace Timesheet.Tests.Services
 
         // DELETE User Account
         [Fact]
-        public async Task DeleteUserAccount_ShouldReturnFailure_WhenIdNotExists()
+        public async Task DeleteUserAccount_ShouldReturnFailure_WhenIdNotFound()
         {
             // Arrange
             var accountId = 42;
@@ -285,11 +296,12 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Contain($"No User Account was found with ID {accountId}");
+
             _userAccountRepoMock.Verify(r => r.GetUserAccountById(accountId), Times.Once);
         }
 
         [Fact]
-        public async Task DeleteUserAccount_ShouldDeleteAccount_WhenIdExists()
+        public async Task DeleteUserAccount_ShouldDeleteAccount_WhenIdFound()
         {
             // Arrange
             var emp = Emp();

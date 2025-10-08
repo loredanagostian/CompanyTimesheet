@@ -40,6 +40,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().HaveCount(2);
+
             _employeeRepoMock.Verify(r => r.GetEmployees(), Times.Once);
         }
 
@@ -55,7 +56,9 @@ namespace Timesheet.Tests.Services
             var result = await _employeeService.GetEmployees();
 
             // Assert
+            result.IsSuccess.Should().BeTrue();
             result.Data.Should().BeEmpty();
+
             _employeeRepoMock.Verify(repo => repo.GetEmployees(), Times.Once);
         }
 
@@ -90,24 +93,28 @@ namespace Timesheet.Tests.Services
         public async Task CreateEmployee_ShouldReturnFailure_WhenCnpAlreadyExists()
         {
             // Arrange
+            var existingCnp = "1234567890123";
+
             var dto = new CreateEmployeeDto
             {
                 FirstName = "Ana",
                 LastName = "Ionescu",
-                CNP = "1234567890123",
+                CNP = existingCnp,
                 ContractType = "FullTime"
             };
 
             _employeeRepoMock
-                .Setup(r => r.GetEmployeeByCNP(dto.CNP))
-                .ReturnsAsync(new Employee { CNP = dto.CNP });
+                .Setup(r => r.GetEmployeeByCNP(existingCnp))
+                .ReturnsAsync(new Employee { CNP = existingCnp });
 
             // Act
             var result = await _employeeService.CreateEmployee(dto);
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Contain("already exists");
+            result.Data.Should().BeNull();
+            result.ErrorMessage.Should().Contain($"An employee with CNP {existingCnp} already exists.");
+
             _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Never);
         }
 
@@ -138,12 +145,13 @@ namespace Timesheet.Tests.Services
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
             result.Data!.CNP.Should().Be(dto.CNP);
+
             _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Once);
         }
 
         // GET Employee by ID
         [Fact]
-        public async Task GetEmployeeById_ShouldReturnFailure_WhenIdNotExists()
+        public async Task GetEmployeeById_ShouldReturnFailure_WhenIdNotFound()
         {
             // Arrange
             int employeeId = 1;
@@ -156,12 +164,14 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Contain("not found");
+            result.Data.Should().BeNull();
+            result.ErrorMessage.Should().Contain($"Employee with ID {employeeId} not found.");
+
             _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
         }
 
         [Fact]
-        public async Task GetEmployeeById_ShouldReturnEmployee_WhenIdExists()
+        public async Task GetEmployeeById_ShouldReturnEmployee_WhenIdFound()
         {
             // Arrange
             int employeeId = 1;
@@ -190,7 +200,7 @@ namespace Timesheet.Tests.Services
 
         // DELETE Employee
         [Fact]
-        public async Task DeleteEmployee_ShouldReturnFailure_WhenIdNotExists()
+        public async Task DeleteEmployee_ShouldReturnFailure_WhenIdNotFound()
         {
             // Arrange
             int employeeId = 1;
@@ -209,7 +219,7 @@ namespace Timesheet.Tests.Services
         }
 
         [Fact]
-        public async Task DeleteEmployee_ShouldDeleteEmployee_WhenIdExists()
+        public async Task DeleteEmployee_ShouldDeleteEmployee_WhenIdFound()
         {
             // Arrange
             int employeeId = 1;
@@ -241,7 +251,7 @@ namespace Timesheet.Tests.Services
 
         // GET Employee by CNP
         [Fact]
-        public async Task GetEmployeeByCNP_ShouldReturnNull_WhenCnpNotExists()
+        public async Task GetEmployeeByCNP_ShouldReturnNull_WhenCnpNotFound()
         {
             // Arrange
             string cnp = "1234567890123";

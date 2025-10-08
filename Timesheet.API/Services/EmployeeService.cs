@@ -86,9 +86,7 @@ namespace Timesheet.API.Services
             var employee = await _employeeRepository.GetEmployeeById(id);
 
             if (employee is null)
-                return ServiceResult<Employee>.Failure(
-                    $"Employee with ID {id} not found."
-                );
+                return ServiceResult<Employee>.Failure($"Employee with ID {id} not found.");
 
             return ServiceResult<Employee>.Success(employee);
         }
@@ -98,9 +96,7 @@ namespace Timesheet.API.Services
             var employee = await _employeeRepository.GetEmployeeById(id);
 
             if (employee is null)
-                return ServiceResult<Employee>.Failure(
-                    $"Employee with ID {id} not found."
-                );
+                return ServiceResult<Employee>.Failure($"Employee with ID {id} not found.");
 
             await _employeeRepository.DeleteEmployee(employee);
 

@@ -98,7 +98,7 @@ namespace Timesheet.API.Services
 
             if (timeEntry is null)
                 return ServiceResult<TimeEntry>.Failure(
-                    $"No User Account was found with ID {timeEntry}."
+                    $"No Time Entry was found with ID {timeEntryId}."
                 );
 
             return ServiceResult<TimeEntry>.Success(timeEntry);
