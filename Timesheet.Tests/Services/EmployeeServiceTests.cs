@@ -61,7 +61,7 @@ namespace Timesheet.Tests.Services
 
         // CREATE Employee
         [Fact]
-        public async Task CreateEmployee_ShouldReturnValidationError_WhenInvalidInput()
+        public async Task CreateEmployee_ShouldReturnValidationError_WhenValidationFails()
         {
             // Arrange
             var dto = new CreateEmployeeDto
@@ -112,7 +112,7 @@ namespace Timesheet.Tests.Services
         }
 
         [Fact]
-        public async Task CreateEmployee_ShouldCallRepository_WhenValidAndUnique()
+        public async Task CreateEmployee_ShouldCreateEmployee_WhenValidInput()
         {
             // Arrange
             var dto = new CreateEmployeeDto
@@ -209,7 +209,7 @@ namespace Timesheet.Tests.Services
         }
 
         [Fact]
-        public async Task DeleteEmployee_ShouldCallRepository_WhenIdExists()
+        public async Task DeleteEmployee_ShouldDeleteEmployee_WhenIdExists()
         {
             // Arrange
             int employeeId = 1;
