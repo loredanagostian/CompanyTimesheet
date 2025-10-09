@@ -1,14 +1,11 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
-using System.Collections.Generic;
 using Timesheet.API.Models;
 using Timesheet.API.Models.DTOs;
 using Timesheet.API.Repositories.IRepositories;
 using Timesheet.API.Services;
 using Timesheet.API.Services.Interfaces;
 using Xunit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Timesheet.Tests.Services
 {

@@ -195,6 +195,7 @@ namespace Timesheet.Tests.Services
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
             result.Data!.EmployeeId.Should().Be(employeeId);
+
             _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
         }
 
@@ -214,6 +215,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Contain("not found");
+
             _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
             _employeeRepoMock.Verify(r => r.DeleteEmployee(It.IsAny<Employee>()), Times.Never);
         }
@@ -245,6 +247,7 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.IsSuccess.Should().BeTrue();
+
             _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
             _employeeRepoMock.Verify(r => r.DeleteEmployee(employee), Times.Once);
         }
@@ -264,6 +267,7 @@ namespace Timesheet.Tests.Services
 
             // Assert
             result.Should().BeNull();
+
             _employeeRepoMock.Verify(r => r.GetEmployeeByCNP(cnp), Times.Once);
         }
 
@@ -290,6 +294,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.Should().NotBeNull();
             result!.CNP.Should().Be(cnp);
+
             _employeeRepoMock.Verify(r => r.GetEmployeeByCNP(cnp), Times.Once);
         }
     }
