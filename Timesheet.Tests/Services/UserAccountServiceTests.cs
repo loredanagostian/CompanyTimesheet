@@ -53,7 +53,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.Should().HaveCount(1);
+            result.Data.Should().HaveCount(1);
 
             _userAccountRepoMock.Verify(r => r.GetUserAccounts(), Times.Once);
         }
@@ -72,7 +72,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.Should().BeEmpty();
+            result.Data.Should().BeEmpty();
 
             _userAccountRepoMock.Verify(r => r.GetUserAccounts(), Times.Once);
         }
@@ -201,7 +201,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.Email.Should().Be(dto.Email ?? $"{employee.FirstName.ToLower()}.{employee.LastName.ToLower()}@company.com");
+            result.Data.Email.Should().Be(dto.Email ?? $"{employee.FirstName.ToLower()}.{employee.LastName.ToLower()}@company.com");
             result.Data.EmployeeId.Should().Be(empId);
             result.Data.Password.Should().Be(dto.Password ?? "P4$$W0Rd");
 
@@ -327,7 +327,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.UserAccountId.Should().Be(accountId);
+            result.Data.UserAccountId.Should().Be(accountId);
             result.Data.EmployeeId.Should().Be(emp.EmployeeId);
             result.Data.Email.Should().Be(expectedEmail);
 

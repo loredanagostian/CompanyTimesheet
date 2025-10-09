@@ -36,8 +36,8 @@ namespace Timesheet.Tests.Controllers
             // Assert API response first (optional)
             var data = await resp.Content.ReadFromJsonAsync<List<Employee>>(jsonOptions);
             data.Should().NotBeNull();
-            data!.Should().HaveCountGreaterThan(0);
-            data!.Any(e => e.FirstName == "Ana").Should().BeTrue();
+            data.Should().HaveCountGreaterThan(0);
+            data.Any(e => e.FirstName == "Ana").Should().BeTrue();
 
             var all = _factory.UsingDb(db => db.Employees.ToList());
             all.Should().HaveCountGreaterThan(0);

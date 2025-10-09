@@ -144,7 +144,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.CNP.Should().Be(dto.CNP);
+            result.Data.CNP.Should().Be(dto.CNP);
 
             _employeeRepoMock.Verify(r => r.CreateEmployee(It.IsAny<Employee>()), Times.Once);
         }
@@ -194,7 +194,7 @@ namespace Timesheet.Tests.Services
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Data.Should().NotBeNull();
-            result.Data!.EmployeeId.Should().Be(employeeId);
+            result.Data.EmployeeId.Should().Be(employeeId);
 
             _employeeRepoMock.Verify(r => r.GetEmployeeById(employeeId), Times.Once);
         }
