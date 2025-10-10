@@ -50,10 +50,18 @@ namespace Timesheet.Tests.Services
             // Act
             var result = await _userAccountService.GetUserAccounts();
 
-            // Assert
-            result.IsSuccess.Should().BeTrue();
-            result.Data.Should().NotBeNull();
-            result.Data!.Should().HaveCount(1);
+            // Assert With Fluent Assertion
+            //
+            //result.IsSuccess.Should().BeTrue();
+            //result.Data.Should().NotBeNull();
+            //result.Data!.Should().HaveCount(1);
+
+            // Assert Without Fluent Assertion
+            Assert.True(result.IsSuccess);
+            Assert.NotNull(result.Data);
+            Assert.Single(result.Data);
+            // OR
+            // Assert.Equal(1, result.Data.Count);
 
             _userAccountRepoMock.Verify(r => r.GetUserAccounts(), Times.Once);
         }
